@@ -13,17 +13,17 @@ class MapProblem():
         return state.name == self.goalState.name
     
     # returns a list of actions that can be taken from the current state, which are the locations that can be reached from the current location
-    def actions(self, state : State) -> list[str]:
-        print("State:", state.name)
-        return self.map[state.name]["actions"]
+    def actions(self, state : State, verbose = False) -> list[str]:
+        if verbose : print("State:", state.name)
+        return self.map[state.name]
     
-    def result(self, state: State, action : str) -> State:
-        nextState = State(action)
+    def result(self, state: State, actionName : str) -> State:
+        nextState = State(actionName)
         return nextState
     
-    def pathCost(self, currentState : State, action, nextState : State):
-        fCost = self.map[nextState.name]["fCost"]
-        movingCost = 0
+    def pathCost(self, currentState : State, heuristicsValue : int, nextState : State):
+        fCost = heuristicsValue
+        movingCost = 0 # add moving cost
         return fCost + movingCost
     
     """ HERE """

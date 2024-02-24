@@ -47,17 +47,22 @@ class Node:
         
         return displayString
 
-    def expand(self, problem : MapProblem):
-        return [self.childNode(problem, action) for action in problem.actions(self.state)]
+    def expand(self, problem : MapProblem, verbose = False):
+        children = []
+        for action in problem.actions(self.state, verbose):
+            actionName = action[0]
+            heuristicValue = action[1]
+            children.append(self.childNode(problem, actionName, heuristicValue))
+        return children
     
     def __str__(self):
         return f"Node: {self.state.name}, fCost: {self.fCost}, action: {self.action}, parent: {self.parent.state.name}"
     
     # Returns a new node with the state that results from applying the given action to the current node's state (which will be a state which's name is the action's name)
-    def childNode(self, problem : MapProblem, action):
-        nextState : State = problem.result(self.state, action)
-        cost = problem.pathCost(self.state, action, nextState)
-        return Node(nextState, cost, self, action)
+    def childNode(self, problem : MapProblem, actionName : str, heuristicValue : int):
+        nextState : State = problem.result(self.state, actionName)
+        cost = problem.pathCost(self.state, heuristicValue, nextState)
+        return Node(nextState, cost, self, actionName)
 
     def path(self):
         """Return a list of nodes forming the path from the root to this node."""
