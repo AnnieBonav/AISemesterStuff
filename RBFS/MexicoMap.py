@@ -2,7 +2,7 @@ import pandas as py, pygame, matplotlib.pyplot as plt, time
 
 worldCities = py.read_csv('./RBFS/worldcities.csv', usecols=['city', 'lat', 'lng', 'country', 'admin_name'])
 
-def createCountryDF(countryName, citiesPerState = 1):
+def createCountryDF(countryName, citiesPerState = 2):
     countryDF = worldCities.copy()
     countryDF = countryDF[countryDF['country'] == countryName]
     countryDF = countryDF.groupby('admin_name').head(citiesPerState)
@@ -10,16 +10,11 @@ def createCountryDF(countryName, citiesPerState = 1):
     countryDF = countryDF.reset_index(drop=True)
     return countryDF
 
-mexicoCities = createCountryDF("Mexico")
-mexicoCities['state'].loc[mexicoCities['city'] == 'Mexico City'] = 'open'
-print(mexicoCities.head())
+countryName = "United States"
+mapToUse = [createCountryDF(countryName), countryName]
+print("Info of map",mapToUse[0].head(), sep="\n")
 
-
-# plt.scatter(mexicoDF['lng'], mexicoDF['lat'])
-# plt.show()
-mapToUse = [mexicoCities, "Mexico"]
-
-sleepTime = 1
+sleepTime = 2
 
 def RunPygame(mapToUse):
     map = mapToUse[0]
@@ -99,10 +94,11 @@ def RunPygame(mapToUse):
         visitedNodeText = font.render("Visited Node: " + str(counter), True, black)
         counter += 1
         if(counter%2 == 0):
-            map['state'].loc[map['city'] == 'Mexico City'] = 'closed'
+            # map['state'].loc[map['city'] == 'Mexico City'] = 'closed'
+            pass
         else:
-            map['state'].loc[map['city'] == 'Mexico City'] = 'frontier'
-
+            #map['state'].loc[map['city'] == 'Mexico City'] = 'frontier'
+            pass
 
         pygame.display.flip()
 
