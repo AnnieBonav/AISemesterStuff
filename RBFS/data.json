@@ -1,0 +1,36 @@
+{
+    "testData" : {
+        "A" : {
+            "fCost" : -1,
+            "actions" : [["B", 100]]
+        },
+        "B" : {
+            "fCost" : 100,
+            "actions" : ["C", "F", "G"]
+        },
+        "C" : {
+            "fCost" : 110,
+            "actions" : ["D"]
+        },
+        "D" : {
+            "fCost" : 210,
+            "actions" : ["E"]
+        },
+        "E" : {
+            "fCost" : 220,
+            "actions" : []
+        },
+        "F" : {
+            "fCost" : 200,
+            "actions" : []
+        },
+        "G" : {
+            "fCost" : 330,
+            "actions" : []
+        }
+    },
+
+    "mexicoData" : {
+
+    }
+}
