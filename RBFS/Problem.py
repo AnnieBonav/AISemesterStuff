@@ -32,4 +32,4 @@ class MapProblem():
         return 1
 
     def __repr__(self):
-        return "<MapProblem initial: {}, goal: {}>".format(self.initial, self.goal)
+        return "<MapProblem initial: {}, goal: {}>".format(self.initialState, self.goalState)

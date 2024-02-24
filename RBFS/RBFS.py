@@ -11,6 +11,7 @@ testProblemA = MapProblem(State("A"), State("E"), data["testDataOneE"])
 testProblemB = MapProblem(State("A"), State("E"), data["testDataTwoE"])
 
 testProblemC = MapProblem(State("A"), State("H"), data["testDataLastNode"])
+testUpsideDown = MapProblem(State("A"), State("E"), data["testUpsideDown"])
 
 allExpandedNodes = []
 allVisitedNodes = []
@@ -60,7 +61,9 @@ resultA = RecursiveBestFirstSearch(testProblemA)
 resultB = RecursiveBestFirstSearch(testProblemB)
 resultC = RecursiveBestFirstSearch(testProblemC)
 
-resultsToShow = [[resultA, "Results A"], [resultB, "Results B"], [resultC, "Results C"]]
+resultUpsideDown = RecursiveBestFirstSearch(testUpsideDown)
+
+resultsToShow = [[resultA, "Results A"], [resultB, "Results B"], [resultC, "Results C"], [resultUpsideDown, "Results Upside Down"]]
 
 def nodesString(stringToShow) -> str:
     nodesString = ""
