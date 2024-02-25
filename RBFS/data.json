@@ -1,4 +1,102 @@
 {
+    "mexico1NodeHeuristics" : {
+        "Acapulco de Juarez" : 0,
+        "Apizaco" : 0,
+        "Aguascalientes" : 0,
+        "Campeche" : 0,
+        "Cancun" : 0,
+        "Cuernavaca" : 0,
+        "Culiacan" : 0,
+        "Durango" : 0,
+        "Ecatepec" : 0,
+        "Guadalajara" : 0,
+        "Guadalupe" : 0,
+        "Hermosillo" : 0,
+        "Juarez" : 0,
+        "La Paz" : 0,
+        "Leon de los Aldama" : 0,
+        "Manzanillo" : 0,
+        "Merida" : 0,
+        "Monterrey" : 0,
+        "Morelia" : 0,
+        "Oaxaca" : 0,
+        "Pachuca" : 0,
+        "Puebla" : 0,
+        "Queretaro" : 0,
+        "Reynosa" : 0,
+        "San Luis Potosi" : 0,
+        "Saltillo" : 0,
+        "Tepic" : 0,
+        "Tijuana" : 0,
+        "Tuxtla" : 0,
+        "Veracruz" : 0,
+        "Villahermosa" : 0
+    },
+    
+    "mexico1Node" : {
+        "Acapulco de Juarez" : [["Morelia", 343], ["Ecatepec", 305], ["Cuernavaca", 236], ["Puebla", 294], ["Oaxaca", 321]],
+
+        "Apizaco" : [["Ecatepec", 96], ["Pachuca", 101], ["Puebla", 40]],
+
+        "Aguascalientes" : [["Guadalajara", 174], ["Guadalupe", 99]],
+
+        "Campeche" : [["Merida", 262], ["Cancun", 196], ["Villahermosa", 199]],
+
+        "Cancun" : [["Merida", 229], ["Campeche", 196]],
+
+        "Cuernavaca" : [["Acapulco de Juarez", 236], ["Ecatepec", 69], ["Puebla", 110]],
+        
+        "Culiacan" : [["Hermosillo", 593], ["Juarez", 768], ["Durango", 255], ["Tepic", 448]],
+
+        "Durango" : [["Culiacan", 255], ["Juarez", 757], ["Saltillo", 394], ["Guadalupe", 345], ["Tepic", 387]],
+
+        "Ecatepec" : [["Acapulco de Juarez", 305], ["Morelia", 226], ["Queretaro", 185], ["Pachuca", 68], ["Apizaco", 96], ["Puebla", 103], ["Cuernavaca", 69]],
+
+        "Guadalajara" : [["Tepic", 183], ["Guadalupe", 246], ["Aguascalientes", 174], ["San Luis Potosi", 294], ["Leon de los Aldama", 232], ["Morelia", 250], ["Manzanillo", 201]],
+        
+        "Guadalupe" : [["Monterrey", 394], ["San Luis Potosi", 170], ["Aguascalientes", 99], ["Guadalajara", 246], ["Tepic", 281], ["Durango", 345], ["Leon de los Aldama", 244], ["Saltillo", 336]],
+
+        "Hermosillo" : [["Tijuana", 687], ["Juarez", 522], ["Culiacan", 593]],
+
+        "Juarez" : [["Saltillo", 869], ["Durango", 757], ["Culiacan", 768], ["Hermosillo", 522]],
+
+        "La Paz" : [["Tijuana", 1134]],
+
+        "Leon de los Aldama" : [["Morelia", 141], ["Guadalajara", 232], ["Guadalupe", 244], ["San Luis Potosi", 131], ["Queretaro", 85]],
+
+        "Manzanillo" : [["Guadalajara", 201], ["Morelia", 336]],
+
+        "Merida" : [["Cancun", 229], ["Campeche", 262]],
+
+        "Monterrey" : [["Reynosa", 205], ["San Luis Potosi", 399], ["Guadalupe", 394], ["Saltillo", 73]],
+
+        "Morelia" : [["Manzanillo", 336], ["Guadalajara", 250], ["Leon de los Aldama", 141], ["Queretaro", 130], ["Ecatepec", 226], ["Acapulco de Juarez", 343]],
+
+        "Oaxaca" : [["Acapulco de Juarez", 321], ["Puebla", 269], ["Veracruz", 249], ["Tuxtla", 396]],
+
+        "Pachuca" : [["San Luis Potosi", 322], ["Veracruz", 292], ["Puebla", 130], ["Apizaco", 101], ["Ecatepec", 68], ["Queretaro", 179]],
+
+        "Puebla" : [["Acapulco de Juarez", 294], ["Ecatepec", 103], ["Cuernavaca", 110], ["Apizaco", 40], ["Pachuca", 130], ["Veracruz", 216], ["Oaxaca", 269]],
+
+        "Queretaro" : [["Morelia", 130], ["Leon de los Aldama", 85], ["San Luis Potosi", 181], ["Pachuca", 179], ["Ecatepec", 185]],
+
+        "Reynosa" : [["Veracruz", 797], ["San Luis Potosi", 514], ["Monterrey", 205]],
+
+        "San Luis Potosi" : [["Reynosa", 514], ["Veracruz", 600], ["Pachuca", 322], ["Queretaro", 181], ["Leon de los Aldama", 131], ["Guadalajara", 294], ["Guadalupe", 170], ["Saltillo", 366], ["Monterrey", 399]],
+
+        "Saltillo" : [["Monterrey", 73], ["San Luis Potosi", 366], ["Guadalupe", 336], ["Durago", 394], ["Juarez", 869]],
+
+        "Tepic" : [["Culiacan", 448], ["Durango", 387], ["Guadalupe", 281], ["Guadalajara", 183]],
+
+        "Tijuana" : [["Hermosillo", 687], ["La Paz", 1134]],
+
+        "Tuxtla" : [["Oaxaca", 396], ["Veracruz", 421], ["Villahermosa", 138]],
+
+        "Veracruz" : [["Villahermosa", 364], ["Tuxtla", 421], ["Reynosa", 797], ["Oaxaca", 249], ["Puebla", 216], ["Pachuca", 292], ["San Luis Potosi", 600]],
+
+        "Villahermosa" : [["Campeche", 199], ["Tuxtla", 138], ["Veracruz", 364]]
+    },
+
     "testDataOneE" : {
         "A" : [["B", 100]],
         "B" : [["C", 110], ["F", 120], ["G", 330]],
