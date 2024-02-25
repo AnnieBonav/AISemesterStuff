@@ -50,7 +50,7 @@ class Map():
         lng1 = city1['lng'].values[0]
         lat2 = city2['lat'].values[0]
         lng2 = city2['lng'].values[0]
-        distance = ((lat1 - lat2)**2 + (lng1 - lng2)**2)**.5
+        distance = ((lat1 - lat2)**2 + (lng1 - lng2)**2)
         distance = round(distance, 2)  # Round distance to two decimal places
 
         return distance

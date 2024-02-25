@@ -1,10 +1,15 @@
 import warnings
 warnings.simplefilter(action='ignore', category=FutureWarning)
 
-from HelperClasses import Graph, Node, State
+from Graph import Graph
+from Node import Node
+from State import State
 from Problem import MapProblem
 from Map import Map
 import json
+import numpy as np
+
+from utils import memoize
 # problem: a problem that can be solved with a recursive best first search, in this case, a graph that represents cities locations and distances between them
 
 mexicoMap = Map("Mexico")
@@ -19,21 +24,26 @@ testProblemB = MapProblem(State("A"), State("E"), data["testDataTwoE"])
 testProblemC = MapProblem(State("A"), State("H"), data["testDataLastNode"])
 testUpsideDown = MapProblem(State("A"), State("E"), data["testUpsideDown"])
 
-mexico1Node = MapProblem(State("Cuernavaca"), State("Veracruz"), data["mexico1Node"], mexicoMap, data["mexico1NodeHeuristics"])
+mexico1Node = MapProblem(State("Manzanillo"), State("Acapulco de Juarez"), data["mexico1Node"], mexicoMap)
 allExpandedNodes = []
 allVisitedNodes = []
-hasHeuristics = False
-hasActionCost = False
 
 counter = 0
-def RecursiveBestFirstSearch(problem : MapProblem, willHaveHeuristics : bool, willHaveActionCost : bool) -> str:
-    global allExpandedNodes, allVisitedNodes, hasHeuristics, hasActionCost
+hCostFunction = None
+
+best = None
+alternative = None
+# If dataHasHeuristics, then the data does not contain the adjacency (action value), but the heuristics itself, so our action cost will be 0
+def RecursiveBestFirstSearch(problem : MapProblem, hFunc = None) -> str:
+    global allExpandedNodes, allVisitedNodes, hCostFunction
     allExpandedNodes = []
     allVisitedNodes = []
-    hasHeuristics = willHaveHeuristics
-    hasActionCost = willHaveActionCost
 
-    rbfsResult = RBFS(problem, Node(problem.initialState, 0), float('inf'))
+    hCostFunction = memoize(hFunc or problem.hCost, 'hCost')
+    initialNode = Node(problem.initialState, 0)
+    initialNode.fCost = (hCostFunction(initialNode))
+
+    rbfsResult = RBFS(problem, initialNode, np.inf)
     if rbfsResult[0] == None:
         return "No solution found"
     
@@ -42,36 +52,41 @@ def RecursiveBestFirstSearch(problem : MapProblem, willHaveHeuristics : bool, wi
 
     return f"Here is the result: {solution}, with a cost of {cost}"
 
-def RBFS(problem : MapProblem, node : Node, f_limit) -> Node:
-    global counter
+def RBFS(problem : MapProblem, node : Node, fLimit) -> Node:
+    global counter, allExpandedNodes, allVisitedNodes, best, alternative
     counter += 1
-    global allExpandedNodes, allVisitedNodes
-    if problem.goalTest(node.state) or counter > 10:
+
+    if type(best) == Node:
+        print("\nBEST Node: ", best.state.name, "Best fCost: ", best.fCost)
+
+    if problem.goalTest(node.state) or counter > 20:
         return node, node.fCost 
     
-    allVisitedNodes.append(node.state.name)
-    successors = node.expand(problem, hasHeuristics, hasActionCost, verbose)
-    for succesor in successors:
-        # if verbose : print("Succesor:",succesor)
-        allExpandedNodes.append(succesor.state.name)
-        succesor.changeHeuristicValue(max(succesor.fCost, node.fCost))
+    allVisitedNodes.append(node.state.name) # Just for visualizing
+    successors = node.expand(problem, verbose)
 
     if len(successors) == 0:
         return None, float('inf')
+    
+    for succesor in successors:
+        # if verbose : print("Succesor:",succesor)
+        allExpandedNodes.append(succesor.state.name)
+        succesor.fCost = (max(succesor.fCost + hCostFunction(succesor), node.fCost))
 
     while True:
         successors.sort(key=lambda x: x.fCost)
         best = successors[0]
-        if best.fCost > f_limit:
+
+        if best.fCost > fLimit:
             return None, best.fCost
         
-        alternative = successors[1].fCost if len(successors) > 1 else float('inf')
-        # result, best.fCost = RBFS(problem, best, min(f_limit, alternative))
+        if len(successors) > 1:
+            alternative = successors[1].fCost
+        else:
+            alternative = np.inf
 
-        result, newfCost = RBFS(problem, best, min(f_limit, alternative))
-        bestIndex = successors.index(best)
-        successors[bestIndex].changeHeuristicValue(newfCost)
-
+        result, best.fCost = RBFS(problem, best, min(fLimit, alternative))
+        
         if result is not None: # if result would also work
             return result, best.fCost
     
@@ -81,7 +96,7 @@ def RBFS(problem : MapProblem, node : Node, f_limit) -> Node:
 
 # resultUpsideDown = RecursiveBestFirstSearch(testUpsideDown)
 
-resultMexico1Node = RecursiveBestFirstSearch(mexico1Node, False, True)
+resultMexico1Node = RecursiveBestFirstSearch(mexico1Node, None)
 resultsToShow = [
     # [resultA, "Results A"],
     # [resultB, "Results B"],

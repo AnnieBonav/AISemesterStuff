@@ -1,29 +1,22 @@
 from State import State
 from Map import Map
 import numpy as np
-
+from Node import Node
 # initialState: string that represents the initial state, in this case, the initial node name
 # goalState: string that represents the goal state, in this case, the goal node name
 # mapInformationFile: string that represents the file with the adjacencyMap information
 class MapProblem():    
-    def __init__(self, initialState: State, goalState: State, mapDict: dict, map : Map = None, heuristicsDict = None):
+    def __init__(self, initialState: State, goalState: State, mapDict: dict, map : Map = None):
         self.initialState : State = initialState
         self.goalState : State = goalState
         self.adjacencyMap : dict = mapDict
         self.map = map
-        self.heuristicsDict = heuristicsDict
 
-        # if there is a map, then we need to calculate the heuristic values
-        if self.map != None:
-            self.calculateHeuristicValues()
-
-    # calculates the heuristic values for the nodes of the map
-    def calculateHeuristicValues(self):
-        print("\n\nCalculating heuristic values")
-        for state in self.adjacencyMap:
-            print("State:", state, "Distance:", self.map.getEuclideanDistance(state, self.goalState.name))
-            self.heuristicsDict[state] = self.map.getEuclideanDistance(state, self.goalState.name)
-    
+    def hCost(self, node : Node):
+        """hCost function is the eucledian distance from a node's state to goal."""
+        print("\nNode:", node.state.name, "Goal:", self.goalState.name, "Distance:", self.map.getEuclideanDistance(node.state.name, self.goalState.name))
+        return self.map.getEuclideanDistance(node.state.name, self.goalState.name)
+        
     def goalTest(self, state : State) -> bool:
         return state.name == self.goalState.name
     
@@ -37,12 +30,9 @@ class MapProblem():
         nextState = State(actionName)
         return nextState
     
-    def pathCost(self, costSoFar, currentState : State, heuristicsValue : int, nextState : State, actionCost : int):
-        hCost = 0
-        if heuristicsValue == 0 or None:
-            hCost = self.heuristicsDict[nextState.name]
-        fCost = costSoFar + (hCost or np.inf)
-        print("Costs:", fCost, " Next State:", nextState.name)
+    def pathCost(self, costSoFar, currentState : State, actionCost : int, nextState : State):
+        fCost = costSoFar + (actionCost or np.inf)
+        print(f"Costs between {currentState.name} and {nextState.name}: Cost so far: {costSoFar}, ActionCost: {actionCost} Fcost:  {fCost}")
         return fCost
     
     """ HERE """
