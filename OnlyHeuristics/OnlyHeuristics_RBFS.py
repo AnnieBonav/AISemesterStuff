@@ -2,8 +2,8 @@ from Node import Node
 from State import State
 from Problem import GraphProblem
 import json, numpy as np
-verbose = True
-
+verbose = False
+verboseExpanded = False
 print("\nWELCOME TO RECURSIVE BEST FIRST SEARCH! (only heuristics)")
 
 with open('./OnlyHeuristics/data.json') as file:
@@ -66,10 +66,14 @@ def RBFS(problem : GraphProblem, node : Node, f_limit) -> Node:
         
         if result is not None:
             return result, best.fCost
-    
+
+if verbose : print("\nTEST A\n")   
 resultA = RecursiveBestFirstSearch(testProblemA)
+if verbose : print("\nTEST B\n")   
 resultB = RecursiveBestFirstSearch(testProblemB)
+if verbose : print("\nTEST LAST NODE\n")
 resultC = RecursiveBestFirstSearch(testDataLastNode)
+if verbose : print("\nPRESENTATION\n")   
 presentationResults = RecursiveBestFirstSearch(presentationExample)
 
 resultsToShow = [[resultA, f"Results A from {testProblemA.initialState.name} to {testProblemA.goalState.name}"], [resultB, f"Results B from {testProblemB.initialState.name} to {testProblemB.goalState.name}"], [resultC, f"Results C from {testDataLastNode.initialState.name} to {testDataLastNode.goalState.name}"], [presentationResults, f"Presentation Example Results from {presentationExample.initialState.name} to {presentationExample.goalState.name}"]]
@@ -85,5 +89,9 @@ def nodesString() -> str:
 
     return nodesString
 
+print("\n\nRESULTS")
 for result in resultsToShow:
-    print(f"\n{result[1]}", result[0], f"All #{len(allExpandedNodes)} expanded nodes: {nodesString()}", sep="\n")
+    if verboseExpanded:
+        print(f"{result[1]}", result[0], f"All #{len(allExpandedNodes)} expanded nodes: {nodesString()}")
+        continue
+    print(f"{result[1]}, {result[0]}")

@@ -21,8 +21,8 @@ with open('./RBFS/data.json') as file:
     data = json.load(file)
 
 # can be changed between the different valid nodes of the json file
-origin = "Cancun"
-goal = "Tijuana"
+origin = "Acapulco de Juarez"
+goal = "Cuernavaca"
 adjacencyData = data["mexico1Node"]
 
 if origin not in adjacencyData:
@@ -45,7 +45,7 @@ waitingStart = 1 # 3
 waitingComplete = 2 # 5
 waitingParent = 1 # 2
 
-runVisualization = False
+runVisualization = True
 
 expandedNodes = []
 # If dataHasHeuristics, then the data does not contain the adjacency (action value), but the heuristics itself, so our action cost will be 0

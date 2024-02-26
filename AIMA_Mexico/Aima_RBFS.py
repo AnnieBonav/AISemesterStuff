@@ -22,7 +22,6 @@ def RecursiveBestFirstSearch(problem, hCost=None):
         allVisitedNodes.append(node.state) # For visualization
 
         if problem.goal_test(node.state):
-            print("GOAL REACHED")
             return node, 0
         
         children = node.expand(problem)
@@ -30,14 +29,13 @@ def RecursiveBestFirstSearch(problem, hCost=None):
         if len(children) == 0:
             return None, np.inf
         
-        if runVisualization : time.sleep(waitingParent) ## For visualization
+        if runVisualization : time.sleep(waitingParent)
         for child in children:
             child.fCost = max(child.pathCost + hCost(child), node.fCost)
             romaniaMap.updateState(child.state, "frontier") # For visualization
         
         if runVisualization : time.sleep(waitingComplete)
-        romaniaMap.resetAllStates() ## For visualization
-        
+        romaniaMap.resetAllStates()
         while True:
             # Order by lowest fCost value
             children.sort(key=lambda x: x.fCost)
@@ -56,7 +54,6 @@ def RecursiveBestFirstSearch(problem, hCost=None):
 
             result, best.fCost = RBFS(problem, best, min(flimit, alternative))
             if result is not None:
-                print("RESULTING")
                 return result, best.fCost
 
     initialNode = Node(problem.initial)
@@ -94,8 +91,6 @@ romaniaMap = UndirectedGraph(dict(
     Pitesti=dict(Rimnicu=97),
     Rimnicu=dict(Sibiu=80),
     Urziceni=dict(Vaslui=142)))
-
-mexicoMap = UndirectedGraph()
 
 romaniaMap.locations = dict(
     Arad=(91, 492), Bucharest=(400, 327), Craiova=(253, 288),
