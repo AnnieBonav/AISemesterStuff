@@ -22,7 +22,7 @@ with open('./RBFS/data.json') as file:
 
 # can be changed between the different valid nodes of the json file
 origin = "Cancun"
-goal = "Cuernavaca"
+goal = "Tijuana"
 adjacencyData = data["mexico1Node"]
 
 if origin not in adjacencyData:
@@ -45,6 +45,7 @@ waitingStart = 1 # 3
 waitingComplete = 2 # 5
 waitingParent = 1 # 2
 
+runVisualization = False
 # If dataHasHeuristics, then the data does not contain the adjacency (action value), but the heuristics itself, so our action cost will be 0
 def RecursiveBestFirstSearch(problem : MapProblem, hFunc = None) -> str:
     global hCostFunction
@@ -55,7 +56,7 @@ def RecursiveBestFirstSearch(problem : MapProblem, hFunc = None) -> str:
     initialNode.fCost = hCostFunction(initialNode, nodeVerbose)
 
     mexicoMap.updateState(initialNode.state.name, "start")
-    time.sleep(waitingStart)
+    if runVisualization : time.sleep(waitingStart)
     rbfsResult = RBFS(problem, initialNode, np.inf)
     if rbfsResult[0] == None:
         return "No solution found"
@@ -76,7 +77,7 @@ def RBFS(problem : MapProblem, node : Node, fLimit) -> Node:
     if len(successors) == 0:
         return None, np.inf
     
-    time.sleep(waitingParent)
+    if runVisualization : time.sleep(waitingParent)
     for succesor in successors:
         mexicoMap.updateState(succesor.state.name, "frontier")
         pathCost = succesor.pathCost
@@ -84,7 +85,7 @@ def RBFS(problem : MapProblem, node : Node, fLimit) -> Node:
         succesor.fCost = pathCost + hCost
         if genVerbose: print("Succesor:", succesor.state.name, "pathCost:", succesor.pathCost, "hCost:", hCostFunction(succesor), "fCost:", succesor.fCost)
 
-    time.sleep(waitingComplete)
+    if runVisualization : time.sleep(waitingComplete)
     mexicoMap.resetAllStates()
     while True:
         successors.sort(key=lambda x: x.fCost)
@@ -226,13 +227,13 @@ def playVisualization(sleepTime = 2):
         pygame.quit()
 
 resultMexico1Node = run_RBFS_as_thread(mexico1Node, None)
-playVisualization()
+if runVisualization : playVisualization()
 resultsToShow = [
     # [resultA, "Results A"],
     # [resultB, "Results B"],
     # [resultC, "Results C"],
     # [resultUpsideDown, "Results Upside Down"],
-    [resultMexico1Node, "Results Mexico 1 Node"]
+    [resultMexico1Node, f"Results Mexico {origin} to {goal}"]
     ]
 
 def nodesString(stringToShow) -> str:
