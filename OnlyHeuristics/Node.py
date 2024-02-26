@@ -2,7 +2,7 @@ from State import State
 from Problem import GraphProblem
 
 class Node:
-    def __init__(self, state : State, fCost, parent = None, action = None):
+    def __init__(self, state : State, fCost = 0, parent = None, action = None):
         self.parent = parent
         self.fCost = fCost
         self.state = state

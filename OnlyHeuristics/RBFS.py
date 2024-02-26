@@ -1,57 +1,69 @@
 from Node import Node
 from State import State
 from Problem import GraphProblem
-import json
-verbose = False
+import json, numpy as np
+verbose = True
 
 print("\nWELCOME TO RECURSIVE BEST FIRST SEARCH! (only heuristics)")
 
-with open('./WorkingAlg/data.json') as file:
+with open('./OnlyHeuristics/data.json') as file:
     data = json.load(file)
 
 testProblemA = GraphProblem(State("A"), State("E"), data["testDataOneE"])
 testProblemB = GraphProblem(State("A"), State("E"), data["testDataTwoE"])
 
-testDataLastNode = GraphProblem(State("A"), State("G"), data["testDataLastNode"])
+testDataLastNode = GraphProblem(State("A"), State("O"), data["testDataLastNode"])
 presentationExample = GraphProblem(State("A"), State("M"), data["presentationExample"])
 
 allExpandedNodes = []
 
 def RecursiveBestFirstSearch(problem: GraphProblem) -> str:
     global allExpandedNodes
-    allExpandedNodes = []
+    allExpandedNodes = [] # Used for visualization purposes
 
-    rbfsResult = RBFS(problem, Node(problem.initialState, 0), float('inf'))
+    # Initialize search with initial Node and start recursion
+    rbfsResult = RBFS(problem, Node(problem.initialState), float('inf'))
     if rbfsResult[0] == None:
         return "No solution found"
     
-    solution = rbfsResult[0].getSolution()
-
-    return f"Here is the result: {problem.initialState.name} -> {solution}"
+    return f"Here is the result: {problem.initialState.name} -> {rbfsResult[0].getSolution()}"
 
 def RBFS(problem : GraphProblem, node : Node, f_limit) -> Node:
     global allExpandedNodes
+
+    # Check if node is the goal
     if problem.goalTest(node.state):
         return node, node.fCost 
     
-    successors = node.expand(problem, verbose)
-    for succesor in successors:
-        if verbose : print("Succesor:",succesor)
-        succesor.hCost = (max(succesor.fCost, node.fCost))
-        allExpandedNodes.append(succesor.state.name) ## Visualization
+    # Expand the node: get initialized children
+    children = node.expand(problem, verbose)
 
-    if len(successors) == 0:
-        return None, float('inf')
+    # If there are no more children, return None and infinity (no solution found)
+    if len(children) == 0:
+        return None, np.inf
+    
+    for child in children:
+        if verbose : print("Child:",child)
+        child.hCost = (max(child.fCost, node.fCost))
+        allExpandedNodes.append(child.state.name) ## Visualization
 
     while True:
-        successors.sort(key=lambda x: x.fCost)
-        best = successors[0]
+        children.sort(key=lambda x: x.fCost)
+        best = children[0]
+
+        # If the best node's fCost is greater than the f_limit, return None and the f_limit (so the parent can choose the next best node to expand on)
         if best.fCost > f_limit:
             return None, best.fCost
         
-        alternative = successors[1].fCost if len(successors) > 1 else float('inf')
+        # Get the second best node
+        alternative = children[1].fCost if len(children) > 1 else np.inf
+        # Recurse on the best node
         result, best.fCost = RBFS(problem, best, min(f_limit, alternative))
 
+        # Check failure conditions
+        if result is None and best.fCost == np.inf:
+            return None, np.inf
+        
         if result is not None:
             return result, best.fCost
     
