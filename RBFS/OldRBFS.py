@@ -138,3 +138,55 @@ def nodesString(stringToShow) -> str:
 
 for result in resultsToShow:
     print(f"\n{result[1]}", result[0], f"All #{len(allVisitedNodes)} visited nodes: {nodesString('visited')}", f"All #{len(allExpandedNodes)} expanded nodes: {nodesString('expanded')}", sep="\n")
+
+
+"""
+def RecursiveBestFirstSearch(problem : MapProblem, hFunc = None) -> str:
+    global hCostFunction
+    hCostFunction = memoize(hFunc or problem.hCost, 'hCost')
+
+    initialNode = Node(problem.initialState)
+    initialNode.fCost = hCostFunction(initialNode, nodeVerbose)
+
+    mexicoMap.updateState(initialNode.state.name, "start")
+    rbfsResult = RBFS(problem, initialNode, np.inf)
+    if rbfsResult[0] == None:
+        return "No solution found"
+    
+    mexicoMap.resetAllStates()
+    mexicoMap.updateState(rbfsResult[0].state.name, "goal")
+    solution = rbfsResult[0].getSolution()
+    print(f"Here is the result: {solution} {problem.goalState.name}, with a cost of {rbfsResult[0].pathCost}")
+    return
+
+def RBFS(problem : MapProblem, node : Node, fLimit) -> Node:
+    global best, alternative
+    if problem.goalTest(node.state):
+        return node, 0 
+    
+    successors = node.expand(problem, nodeVerbose)
+
+    if len(successors) == 0:
+        return None, np.inf
+    
+    for succesor in successors:
+        pathCost = succesor.pathCost
+        hCost = hCostFunction(succesor)
+        succesor.fCost = max(pathCost + hCost, node.fCost)
+
+    while True:
+        successors.sort(key=lambda x: x.fCost)
+        best = successors[0]
+
+        if best.fCost > fLimit:
+            return None, best.fCost
+        
+        if len(successors) > 1:
+            alternative = successors[1].fCost
+        else:
+            alternative = np.inf
+
+        result, best.fCost = RBFS(problem, best, min(fLimit, alternative))
+        if result is not None: # if result would also work
+            return result, best.fCost
+"""
