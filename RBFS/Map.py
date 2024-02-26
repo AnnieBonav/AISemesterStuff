@@ -7,7 +7,7 @@ import threading
 # self.worldCities, contains the information of the cities of the world
 
 class Map():
-    def __init__(self, countryName, citiesPerState = 1, mapsFile = "./RBFS/worldcities.csv", verbose = False):
+    def __init__(self, countryName, citiesPerState = 1, verbose = False, mapsFile = "./RBFS/worldcities.csv"):
         self.worldCities = py.read_csv(mapsFile, usecols=['city', 'lat', 'lng', 'country', 'admin_name'])
         self.initialize(countryName, citiesPerState)
         self.countryName = countryName
@@ -34,6 +34,7 @@ class Map():
     def createCountryDF(self, countryName):
         countryDF = self.worldCities.copy()
         countryDF = countryDF[countryDF['country'] == countryName]
+        countryDF = countryDF[countryDF['admin_name'] != 'Baja California Sur']
         countryDF['state'] = 'closed'
         countryDF = countryDF.reset_index(drop=True)
         return countryDF

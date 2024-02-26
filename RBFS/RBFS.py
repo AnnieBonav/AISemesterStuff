@@ -7,22 +7,22 @@ from Problem import MapProblem
 from Map import Map
 from utils import memoize
 import json, numpy as np, time
-genVerbose = False
+genVerbose = True
 nodeVerbose = False
 
 print("\n\nWELCOME TO RBFS (Recursive Best First Search) ALGORITHM")
 
 # creates a Map object that represents the country of Mexico
 countryName = "Mexico"
-mexicoMap = Map(countryName)
+mexicoMap = Map(countryName, 1, genVerbose)
 
 # loads the adjacency data from the json file
 with open('./RBFS/data.json') as file:
     data = json.load(file)
 
 # can be changed between the different valid nodes of the json file
-origin = "Monterrey"
-goal = "Tijuana"
+origin = "Cancun"
+goal = "Cuernavaca"
 adjacencyData = data["mexico1Node"]
 
 if origin not in adjacencyData:
@@ -42,13 +42,15 @@ alternative = None
 
 # waiting times for the visualization
 waitingStart = 1 # 3
-waitingComplete = 1 # 5
-waitingParent = 0 # 2
+waitingComplete = 2 # 5
+waitingParent = 1 # 2
 
 # If dataHasHeuristics, then the data does not contain the adjacency (action value), but the heuristics itself, so our action cost will be 0
 def RecursiveBestFirstSearch(problem : MapProblem, hFunc = None) -> str:
     global hCostFunction
     hCostFunction = memoize(hFunc or problem.hCost, 'hCost')
+
+    # 
     initialNode = Node(problem.initialState)
     initialNode.fCost = hCostFunction(initialNode, nodeVerbose)
 
