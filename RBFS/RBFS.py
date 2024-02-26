@@ -6,10 +6,9 @@ from Node import Node
 from State import State
 from Problem import MapProblem
 from Map import Map
-import json
-import numpy as np
-
+import json, numpy as np, time
 from utils import memoize
+
 # problem: a problem that can be solved with a recursive best first search, in this case, a graph that represents cities locations and distances between them
 countryName = "Mexico"
 mexicoMap = Map(countryName)
@@ -38,6 +37,8 @@ def RecursiveBestFirstSearch(problem : MapProblem, hFunc = None) -> str:
     initialNode = Node(problem.initialState)
     initialNode.fCost = hCostFunction(initialNode)
 
+    mexicoMap.updateState(initialNode.state.name, "start")
+    time.sleep(waiting)
     rbfsResult = RBFS(problem, initialNode, np.inf)
     if rbfsResult[0] == None:
         return "No solution found"
@@ -52,7 +53,6 @@ def RBFS(problem : MapProblem, node : Node, fLimit) -> Node:
     if problem.goalTest(node.state):
         return node, 0 
     
-    mexicoMap.resetAllStates()
     successors = node.expand(problem, verbose)
 
     if len(successors) == 0:
@@ -66,6 +66,8 @@ def RBFS(problem : MapProblem, node : Node, fLimit) -> Node:
         succesor.fCost = pathCost + hCost
         print("Succesor:", succesor.state.name, "pathCost:", succesor.pathCost, "hCost:", hCostFunction(succesor), "fCost:", succesor.fCost)
 
+    time.sleep(waiting)
+    mexicoMap.resetAllStates()
     while True:
         successors.sort(key=lambda x: x.fCost)
         best = successors[0]
@@ -80,9 +82,7 @@ def RBFS(problem : MapProblem, node : Node, fLimit) -> Node:
 
         # Update Map
         mexicoMap.updateState(best.state.name, "open")
-        import time
-        time.sleep(waiting)
-
+        
         result, best.fCost = RBFS(problem, best, min(fLimit, alternative))
         if result is not None: # if result would also work
             return result, best.fCost
@@ -113,6 +113,7 @@ def playVisualization(sleepTime = 2):
         black = (0, 0, 0)
         gray = (200, 200, 200)
         white = (255, 255, 255)
+        pink = (255, 200, 200)
         
         font = pygame.font.Font(None, 36)
         titleText = font.render(f"{countryName}'s Map", True, black)
@@ -157,19 +158,6 @@ def playVisualization(sleepTime = 2):
 
             # Clear the screen
             screen.fill(white)
-
-            # Draw the points
-            for lat, lng, state in zip(scaled_lat + screenHeight/10, scaled_lng + screenWidth/10, mapForVisualization['state']):
-                match (state):
-                    case "open":
-                        color = red
-                    case "closed":
-                        color = black
-                    case "frontier":
-                        color = blue
-                    case _:
-                        color = gray
-                pygame.draw.circle(screen, color, (int(lng), int(lat)), 6)
             
             # Draw the lines (connecting edges) between all the states on the map
             for origin, destinations in adjacencyData.items():
@@ -184,6 +172,21 @@ def playVisualization(sleepTime = 2):
                     destYValue =destinationData['lat'].values[0] + screenHeight/10
                     destinationCoords = (int(destXValue), int(destYValue))
                     pygame.draw.line(screen, black, originCoords, destinationCoords, 4)
+
+            # Draw the points
+            for lat, lng, state in zip(scaled_lat + screenHeight/10, scaled_lng + screenWidth/10, mapForVisualization['state']):
+                match (state):
+                    case "open":
+                        color = red
+                    case "closed":
+                        color = black
+                    case "frontier":
+                        color = blue
+                    case "start":
+                        color = pink
+                    case _:
+                        color = gray
+                pygame.draw.circle(screen, color, (int(lng), int(lat)), 6)
 
             # Update the screen
             textX = (screenWidth - textWidth) // 2
