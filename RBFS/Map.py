@@ -2,15 +2,19 @@ import pandas as pd
 import unicodedata
 import pandas as py, pygame, matplotlib.pyplot as plt, time
 pd.options.mode.chained_assignment = None
+import threading
 
 # self.worldCities, contains the information of the cities of the world
 
 class Map():
-    def __init__(self, countryName, citiesPerState = 1, mapsFile = "./RBFS/worldcities.csv"):
+    def __init__(self, countryName, citiesPerState = 1, mapsFile = "./RBFS/worldcities.csv", verbose = False):
         self.worldCities = py.read_csv(mapsFile, usecols=['city', 'lat', 'lng', 'country', 'admin_name'])
         self.initialize(countryName, citiesPerState)
         self.countryName = countryName
-        self.seeAllData()
+        if verbose : self.seeAllData()
+    
+    def resetAllStates(self):
+        self.map['state'] = 'closed'
     
     def seeAllData(self):        
         for i in range(self.map.shape[0]-1):
@@ -41,6 +45,10 @@ class Map():
 
     def updateState(self, city, state):
         self.map['state'].loc[self.map['city'] == city] = state
+    
+    def getCoordinates (self, city):
+        city = self.map.loc[self.map['city'] == city]
+        return (city['lat'].values[0], city['lng'].values[0])
     
     def getEuclideanDistance(self, city1Name, city2Name):
         city1 = self.map.loc[self.map['city'] == city1Name]
@@ -135,10 +143,16 @@ class Map():
 
             pygame.display.flip()
 
-            time.sleep(sleepTime)
-            print("Slept")
+            # time.sleep(sleepTime)
+            # print("Slept")
         # Quit Pygame
         pygame.quit()
+    
+
+    def runVisualization(self):
+        self.playVisualization()
+        # visualization_thread = threading.Thread(target=self.playVisualization)
+        # visualization_thread.start()
 
 # map = Map("Mexico", 1)
 # map.playVisualization()
