@@ -15,8 +15,27 @@ class Graph:
     def __init__(self, graph_dict=None, directed=True):
         self.graph_dict = graph_dict or {}
         self.directed = directed
+        self.maxPath = 0
+        self.mainNodeText = ""
         if not directed:
             self.make_undirected()
+
+    def addMap(self, map):
+        self.map = map
+        self.map['lat'] = self.map['lat'].astype(float)
+        self.map['lng'] = self.map['lng'].astype(float)
+        self.map['state'] = "closed"  # Add column 'state' with value "closed"
+        
+    
+    def updateState(self, city, state):
+        self.map['state'].loc[self.map['city'] == city] = state
+    
+    def getCoordinates (self, city):
+        city = self.map.loc[self.map['city'] == city]
+        return (city['lat'].values[0], city['lng'].values[0])
+
+    def resetAllStates(self):
+        self.map['state'] = "closed"
 
     def make_undirected(self):
         """Make a digraph into an undirected graph by adding symmetric edges."""
