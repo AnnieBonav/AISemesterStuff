@@ -46,12 +46,13 @@ waitingComplete = 2 # 5
 waitingParent = 1 # 2
 
 runVisualization = False
+
+expandedNodes = []
 # If dataHasHeuristics, then the data does not contain the adjacency (action value), but the heuristics itself, so our action cost will be 0
 def RecursiveBestFirstSearch(problem : MapProblem, hFunc = None) -> str:
     global hCostFunction
     hCostFunction = memoize(hFunc or problem.hCost, 'hCost')
 
-    # 
     initialNode = Node(problem.initialState)
     initialNode.fCost = hCostFunction(initialNode, nodeVerbose)
 
@@ -68,34 +69,36 @@ def RecursiveBestFirstSearch(problem : MapProblem, hFunc = None) -> str:
     return
 
 def RBFS(problem : MapProblem, node : Node, fLimit) -> Node:
-    global best, alternative
+    global best, alternative, expandedNodes
+
     if problem.goalTest(node.state):
         return node, 0 
     
-    successors = node.expand(problem, nodeVerbose)
+    children = node.expand(problem, nodeVerbose)
 
-    if len(successors) == 0:
+    if len(children) == 0:
         return None, np.inf
     
     if runVisualization : time.sleep(waitingParent)
-    for succesor in successors:
-        mexicoMap.updateState(succesor.state.name, "frontier")
-        pathCost = succesor.pathCost
-        hCost = hCostFunction(succesor)
-        succesor.fCost = pathCost + hCost
-        if genVerbose: print("Succesor:", succesor.state.name, "pathCost:", succesor.pathCost, "hCost:", hCostFunction(succesor), "fCost:", succesor.fCost)
+    for child in children:
+        mexicoMap.updateState(child.state.name, "frontier")
+        pathCost = child.pathCost
+        hCost = hCostFunction(child)
+        child.fCost = pathCost + hCost
+        if genVerbose: print("Succesor:", child.state.name, "pathCost:", child.pathCost, "hCost:", hCostFunction(child), "fCost:", child.fCost)
+        expandedNodes.append(child.state.name) ## Visualization
 
     if runVisualization : time.sleep(waitingComplete)
     mexicoMap.resetAllStates()
     while True:
-        successors.sort(key=lambda x: x.fCost)
-        best = successors[0]
+        children.sort(key=lambda x: x.fCost)
+        best = children[0]
 
         if best.fCost > fLimit:
             return None, best.fCost
         
-        if len(successors) > 1:
-            alternative = successors[1].fCost
+        if len(children) > 1:
+            alternative = children[1].fCost
         else:
             alternative = np.inf
 
@@ -236,15 +239,9 @@ resultsToShow = [
     [resultMexico1Node, f"Results Mexico {origin} to {goal}"]
     ]
 
-def nodesString(stringToShow) -> str:
+def nodesString() -> str:
     nodesString = ""
-    match (stringToShow):
-        case "visited":
-            nodesToTurnToString = allVisitedNodes
-        case "expanded":
-            nodesToTurnToString = allExpandedNodes
-        case _:
-            return "Invalid stringToShow value"
+    nodesToTurnToString = expandedNodes
     
     for i in range(len(nodesToTurnToString)):
         if i == len(nodesToTurnToString)-1:
@@ -254,4 +251,4 @@ def nodesString(stringToShow) -> str:
     return nodesString
 
 for result in resultsToShow:
-    print(f"\n{result[1]}", result[0], sep="\n")
+    print(f"\n{result[1]}", result[0], f"All #{len(expandedNodes)} expanded nodes: {nodesString()}", sep="\n")
