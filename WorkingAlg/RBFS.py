@@ -1,5 +1,6 @@
-from HelperClasses import Graph, Node, State
-from Problem import MapProblem
+from Node import Node
+from State import State
+from Problem import GraphProblem
 import json
 # problem: a problem that can be solved with a recursive best first search, in this case, a graph that represents cities locations and distances between them
 
@@ -7,15 +8,16 @@ verbose = True
 with open('./RBFS/data.json') as file:
     data = json.load(file)
 
-testProblemA = MapProblem(State("A"), State("E"), data["testDataOneE"])
-testProblemB = MapProblem(State("A"), State("E"), data["testDataTwoE"])
+testProblemA = GraphProblem(State("A"), State("E"), data["testDataOneE"])
+testProblemB = GraphProblem(State("A"), State("E"), data["testDataTwoE"])
 
-testProblemC = MapProblem(State("A"), State("H"), data["testDataLastNode"])
+testProblemC = GraphProblem(State("A"), State("H"), data["testDataLastNode"])
+presentationExample = GraphProblem(State("A"), State("M"), data["presentationExample"])
 
 allExpandedNodes = []
 allVisitedNodes = []
 
-def RecursiveBestFirstSearch(problem: MapProblem) -> str:
+def RecursiveBestFirstSearch(problem: GraphProblem) -> str:
     global allExpandedNodes, allVisitedNodes
     allExpandedNodes = []
     allVisitedNodes = []
@@ -27,9 +29,9 @@ def RecursiveBestFirstSearch(problem: MapProblem) -> str:
     solution = rbfsResult[0].getSolution()
     cost = rbfsResult[1]
 
-    return f"Here is the result: {solution}, with a cost of {cost}"
+    return f"Here is the result: {solution}"
 
-def RBFS(problem : MapProblem, node : Node, f_limit) -> Node:
+def RBFS(problem : GraphProblem, node : Node, f_limit) -> Node:
     global allExpandedNodes, allVisitedNodes
     if problem.goalTest(node.state):
         return node, node.fCost 
@@ -38,8 +40,8 @@ def RBFS(problem : MapProblem, node : Node, f_limit) -> Node:
     successors = node.expand(problem, verbose)
     for succesor in successors:
         if verbose : print("Succesor:",succesor)
+        # succesor.hCost = (max(succesor.fCost, node.fCost))
         allExpandedNodes.append(succesor.state.name)
-        # succesor.changeHeuristicValue(max(succesor.fCost, node.fCost))
 
     if len(successors) == 0:
         return None, float('inf')
@@ -59,8 +61,9 @@ def RBFS(problem : MapProblem, node : Node, f_limit) -> Node:
 resultA = RecursiveBestFirstSearch(testProblemA)
 resultB = RecursiveBestFirstSearch(testProblemB)
 resultC = RecursiveBestFirstSearch(testProblemC)
+presentationResults = RecursiveBestFirstSearch(presentationExample)
 
-resultsToShow = [[resultA, "Results A"], [resultB, "Results B"], [resultC, "Results C"]]
+resultsToShow = [[resultA, f"Results A from {testProblemA.initialState.name} to {testProblemA.goalState.name}"], [resultB, f"Results B from {testProblemB.initialState.name}"], [resultC, f"Results C from {testProblemC.initialState.name} to {testProblemC.goalState.name}"], [presentationResults, f"Presentation Example Results from {presentationExample.initialState.name} to {presentationExample.goalState.name}"]]
 
 def nodesString(stringToShow) -> str:
     nodesString = ""

@@ -3,7 +3,7 @@ from State import State
 # initialState: string that represents the initial state, in this case, the initial node name
 # goalState: string that represents the goal state, in this case, the goal node name
 # mapInformationFile: string that represents the file with the map information
-class MapProblem():    
+class GraphProblem():    
     def __init__(self, initialState: State, goalState: State, mapDict: dict):
         self.initialState : State = initialState
         self.goalState : State = goalState
@@ -32,4 +32,4 @@ class MapProblem():
         return 1
 
     def __repr__(self):
-        return "<MapProblem initial: {}, goal: {}>".format(self.initial, self.goal)
+        return "<GraphProblem initial: {}, goal: {}>".format(self.initial, self.goal)
