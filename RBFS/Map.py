@@ -12,6 +12,8 @@ class Map():
         self.initialize(countryName, citiesPerState)
         self.countryName = countryName
         if verbose : self.seeAllData()
+        self.maxPath = 0
+        self.currentVisitedNode = ""
     
     def resetAllStates(self):
         self.map['state'] = 'closed'

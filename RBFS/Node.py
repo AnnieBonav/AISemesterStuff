@@ -24,17 +24,17 @@ class Node:
         children = []
         for action in problem.actions(self.state, verbose):
             # TODO: Here would be the checking if the value is heuristics or action cost
-            children.append(self.childNode(problem, action))
+            children.append(self.childNode(problem, action, verbose))
         return children
     
     # Returns a new node with the state that results from applying the given action to the current node's state (which will be a state which's name is the action's name)
-    def childNode(self, problem, action):
+    def childNode(self, problem, action, verbose = False):
         actionName = action[0]
         nextState : State = problem.result(self.state, actionName)
         nextNode = Node(state = nextState,
                         parent = self,
                         action = action,
-                        pathCost = problem.pathCost(self.pathCost, self.state, action, nextState))
+                        pathCost = problem.pathCost(self.pathCost, self.state, action, nextState, verbose))
         return nextNode
 
     def path(self):

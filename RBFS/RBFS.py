@@ -1,72 +1,88 @@
 import warnings
 warnings.simplefilter(action='ignore', category=FutureWarning)
 
-from Graph import Graph
 from Node import Node
 from State import State
 from Problem import MapProblem
 from Map import Map
-import json, numpy as np, time
 from utils import memoize
+import json, numpy as np, time
+genVerbose = False
+nodeVerbose = False
 
-# problem: a problem that can be solved with a recursive best first search, in this case, a graph that represents cities locations and distances between them
+print("\n\nWELCOME TO RBFS (Recursive Best First Search) ALGORITHM")
+
+# creates a Map object that represents the country of Mexico
 countryName = "Mexico"
 mexicoMap = Map(countryName)
 
-verbose = True
+# loads the adjacency data from the json file
 with open('./RBFS/data.json') as file:
     data = json.load(file)
 
+# can be changed between the different valid nodes of the json file
 origin = "Monterrey"
 goal = "Tijuana"
 adjacencyData = data["mexico1Node"]
+
+if origin not in adjacencyData:
+    print("Origin does not exist on the problem, please change to a valid node.")
+    exit()
+if goal not in adjacencyData:
+    print("Goal does not exist on the problem, please change to a valid node.")
+    exit()
+
+# problem: a problem that can be solved with a recursive best first search, in this case, a graph that represents cities locations and distances between them, specifically from Mexico
 mexico1Node = MapProblem(State(origin), State(goal), adjacencyData, mexicoMap)
 
-counter = 0
+# hCostFunction, best and alternative as kept as global variables to be used in the RBFS function
 hCostFunction = None
-
 best = None
 alternative = None
 
-waiting = 5
+# waiting times for the visualization
+waitingStart = 1 # 3
+waitingComplete = 1 # 5
+waitingParent = 0 # 2
 
 # If dataHasHeuristics, then the data does not contain the adjacency (action value), but the heuristics itself, so our action cost will be 0
 def RecursiveBestFirstSearch(problem : MapProblem, hFunc = None) -> str:
     global hCostFunction
     hCostFunction = memoize(hFunc or problem.hCost, 'hCost')
     initialNode = Node(problem.initialState)
-    initialNode.fCost = hCostFunction(initialNode)
+    initialNode.fCost = hCostFunction(initialNode, nodeVerbose)
 
     mexicoMap.updateState(initialNode.state.name, "start")
-    time.sleep(waiting)
+    time.sleep(waitingStart)
     rbfsResult = RBFS(problem, initialNode, np.inf)
     if rbfsResult[0] == None:
         return "No solution found"
     
+    mexicoMap.resetAllStates()
+    mexicoMap.updateState(rbfsResult[0].state.name, "goal")
     solution = rbfsResult[0].getSolution()
-
-    return f"Here is the result: {solution} {problem.goalState.name}, with a cost of {rbfsResult[0].pathCost}"
+    print(f"Here is the result: {solution} {problem.goalState.name}, with a cost of {rbfsResult[0].pathCost}")
+    return
 
 def RBFS(problem : MapProblem, node : Node, fLimit) -> Node:
-    global counter, best, alternative
-    counter += 1
+    global best, alternative
     if problem.goalTest(node.state):
         return node, 0 
     
-    successors = node.expand(problem, verbose)
+    successors = node.expand(problem, nodeVerbose)
 
     if len(successors) == 0:
         return None, np.inf
     
+    time.sleep(waitingParent)
     for succesor in successors:
         mexicoMap.updateState(succesor.state.name, "frontier")
-        # if verbose : print("Succesor:",succesor)
         pathCost = succesor.pathCost
         hCost = hCostFunction(succesor)
         succesor.fCost = pathCost + hCost
-        print("Succesor:", succesor.state.name, "pathCost:", succesor.pathCost, "hCost:", hCostFunction(succesor), "fCost:", succesor.fCost)
+        if genVerbose: print("Succesor:", succesor.state.name, "pathCost:", succesor.pathCost, "hCost:", hCostFunction(succesor), "fCost:", succesor.fCost)
 
-    time.sleep(waiting)
+    time.sleep(waitingComplete)
     mexicoMap.resetAllStates()
     while True:
         successors.sort(key=lambda x: x.fCost)
@@ -80,9 +96,11 @@ def RBFS(problem : MapProblem, node : Node, fLimit) -> Node:
         else:
             alternative = np.inf
 
-        # Update Map
+        ### Updates Visuals
         mexicoMap.updateState(best.state.name, "open")
-        
+        mexicoMap.maxPath = best.pathCost
+        mexicoMap.currentVisitedNode = best.state.name
+
         result, best.fCost = RBFS(problem, best, min(fLimit, alternative))
         if result is not None: # if result would also work
             return result, best.fCost
@@ -113,11 +131,13 @@ def playVisualization(sleepTime = 2):
         black = (0, 0, 0)
         gray = (200, 200, 200)
         white = (255, 255, 255)
-        pink = (255, 200, 200)
+        pink = (235, 50, 180)
+        orange = (245, 115, 0)
         
         font = pygame.font.Font(None, 36)
         titleText = font.render(f"{countryName}'s Map", True, black)
-        visitedNodeText = font.render("Visited Node:", True, black)
+        currentVisitedNode = font.render("Visited Node:", True, black)
+        currentPathCostText = font.render("Current Path Cost:", True, black)
 
         # Set the width and height of the screen
         screenWidth = 1200
@@ -139,8 +159,6 @@ def playVisualization(sleepTime = 2):
         max_lng = mapForVisualization['lng'].max()
 
         scaled_lat = (mapForVisualization['lat'] - min_lat) / (max_lat - min_lat) * screenHeight
-        print("Info", type(scaled_lat))
-
         scaled_lng = (mapForVisualization['lng'] - min_lng) / (max_lng - min_lng) * screenWidth
         scaled_lat = screenHeight - scaled_lat
 
@@ -149,7 +167,6 @@ def playVisualization(sleepTime = 2):
         # Game loop
         running = True
 
-        counter = 0
         while running:
             # Handle events
             for event in pygame.event.get():
@@ -181,12 +198,14 @@ def playVisualization(sleepTime = 2):
                     case "closed":
                         color = black
                     case "frontier":
-                        color = blue
+                        color = green
                     case "start":
                         color = pink
+                    case "goal":
+                        color = orange
                     case _:
                         color = gray
-                pygame.draw.circle(screen, color, (int(lng), int(lat)), 6)
+                pygame.draw.circle(screen, color, (int(lng), int(lat)), 8)
 
             # Update the screen
             textX = (screenWidth - textWidth) // 2
@@ -194,20 +213,14 @@ def playVisualization(sleepTime = 2):
             screen.blit(titleText, (textX, textY))
 
             textY = 40
-            screen.blit(visitedNodeText, (40, textY))
+            screen.blit(currentVisitedNode, (40, textY))
+            currentVisitedNode = font.render("Visited Node: " + str(mexicoMap.currentVisitedNode), True, black)
 
-            visitedNodeText = font.render("Visited Node: " + str(counter), True, black)
-            counter += 1
-            # if(counter%2 == 0):
-            #     self.updateState('Mexico City', 'closed')
-            # else:
-            #     self.updateState('Mexico City', 'frontier')
-
+            textY = screenHeight - 40
+            screen.blit(currentPathCostText, (40, textY))
+            currentPathCostText = font.render("Current Path Cost: " + str(mexicoMap.maxPath), True, black)
+            
             pygame.display.flip()
-
-            # time.sleep(sleepTime)
-            # print("Slept")
-        # Quit Pygame
         pygame.quit()
 
 resultMexico1Node = run_RBFS_as_thread(mexico1Node, None)
