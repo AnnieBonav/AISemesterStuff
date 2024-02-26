@@ -31,7 +31,10 @@ class Node:
     def childNode(self, problem, action):
         actionName = action[0]
         nextState : State = problem.result(self.state, actionName)
-        nextNode = Node(nextState, self, action, problem.pathCost(self.pathCost, self.state, action, nextState))
+        nextNode = Node(state = nextState,
+                        parent = self,
+                        action = action,
+                        pathCost = problem.pathCost(self.pathCost, self.state, action, nextState))
         return nextNode
 
     def path(self):
@@ -43,4 +46,4 @@ class Node:
         return list(reversed(path_back))
     
     def __str__(self):
-        return f"Node: {self.state.name}, fCost: {self.fCost}, action: {self.action}, parent: {self.parent.state.name}"
+        return f"Node: {self.state.name}, pathCost: {self.pathCost}, fCost: {self.fCost}, action: {self.action}, parent: {self.parent.state.name}"

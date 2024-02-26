@@ -1,38 +1,4 @@
 {
-    "mexico1NodeHeuristics" : {
-        "Acapulco de Juarez" : 0,
-        "Apizaco" : 0,
-        "Aguascalientes" : 0,
-        "Campeche" : 0,
-        "Cancun" : 0,
-        "Cuernavaca" : 0,
-        "Culiacan" : 0,
-        "Durango" : 0,
-        "Ecatepec" : 0,
-        "Guadalajara" : 0,
-        "Guadalupe" : 0,
-        "Hermosillo" : 0,
-        "Juarez" : 0,
-        "La Paz" : 0,
-        "Leon de los Aldama" : 0,
-        "Manzanillo" : 0,
-        "Merida" : 0,
-        "Monterrey" : 0,
-        "Morelia" : 0,
-        "Oaxaca" : 0,
-        "Pachuca" : 0,
-        "Puebla" : 0,
-        "Queretaro" : 0,
-        "Reynosa" : 0,
-        "San Luis Potosi" : 0,
-        "Saltillo" : 0,
-        "Tepic" : 0,
-        "Tijuana" : 0,
-        "Tuxtla" : 0,
-        "Veracruz" : 0,
-        "Villahermosa" : 0
-    },
-    
     "mexico1Node" : {
         "Acapulco de Juarez" : [["Morelia", 343], ["Ecatepec", 305], ["Cuernavaca", 236], ["Puebla", 294], ["Oaxaca", 321]],
 
@@ -60,7 +26,7 @@
 
         "Juarez" : [["Saltillo", 869], ["Durango", 757], ["Culiacan", 768], ["Hermosillo", 522]],
 
-        "La Paz" : [["Tijuana", 1134]],
+        "La Paz" : [["Tijuana", 200]],
 
         "Leon de los Aldama" : [["Morelia", 141], ["Guadalajara", 232], ["Guadalupe", 244], ["San Luis Potosi", 131], ["Queretaro", 85]],
 
@@ -84,11 +50,11 @@
 
         "San Luis Potosi" : [["Reynosa", 514], ["Veracruz", 600], ["Pachuca", 322], ["Queretaro", 181], ["Leon de los Aldama", 131], ["Guadalajara", 294], ["Guadalupe", 170], ["Saltillo", 366], ["Monterrey", 399]],
 
-        "Saltillo" : [["Monterrey", 73], ["San Luis Potosi", 366], ["Guadalupe", 336], ["Durago", 394], ["Juarez", 869]],
+        "Saltillo" : [["Monterrey", 73], ["San Luis Potosi", 366], ["Guadalupe", 336], ["Durango", 394], ["Juarez", 869]],
 
         "Tepic" : [["Culiacan", 448], ["Durango", 387], ["Guadalupe", 281], ["Guadalajara", 183]],
 
-        "Tijuana" : [["Hermosillo", 687], ["La Paz", 1134]],
+        "Tijuana" : [["Hermosillo", 687], ["La Paz", 200]],
 
         "Tuxtla" : [["Oaxaca", 396], ["Veracruz", 421], ["Villahermosa", 138]],
 
