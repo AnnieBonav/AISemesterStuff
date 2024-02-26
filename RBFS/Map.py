@@ -50,8 +50,9 @@ class Map():
         lng1 = city1['lng'].values[0]
         lat2 = city2['lat'].values[0]
         lng2 = city2['lng'].values[0]
-        distance = ((lat1 - lat2)**2 + (lng1 - lng2)**2)
-        distance = round(distance, 2)  # Round distance to two decimal places
+        distance = ((lat1 - lat2)**2 + (lng1 - lng2)**2) * 0.5
+        print(f"EUCLEDIAN DISTANCE between {city1Name} and {city2Name} is {distance}")
+        distance = round(distance ** 2, 2)  # Square the distance
 
         return distance
     

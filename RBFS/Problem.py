@@ -18,6 +18,7 @@ class MapProblem():
         return self.map.getEuclideanDistance(node.state.name, self.goalState.name)
         
     def goalTest(self, state : State) -> bool:
+        print("\GOAL TEST:", state.name, self.goalState.name, state.name == self.goalState.name)
         return state.name == self.goalState.name
     
     # returns a list of actions that can be taken from the current state, which are the locations that can be reached from the current location
@@ -30,10 +31,13 @@ class MapProblem():
         nextState = State(actionName)
         return nextState
     
-    def pathCost(self, costSoFar, currentState : State, actionCost : int, nextState : State):
-        fCost = costSoFar + (actionCost or np.inf)
-        print(f"Costs between {currentState.name} and {nextState.name}: Cost so far: {costSoFar}, ActionCost: {actionCost} Fcost:  {fCost}")
-        return fCost
+    def pathCost(self, costSoFar, currentState : State, action : str, nextState : State):
+        for action in self.adjacencyMap[currentState.name]:
+            if action[0] == nextState.name:
+                actionCost = action[1]
+        pathCost = costSoFar + (actionCost or np.inf)
+        print(f"Costs between {currentState.name} and {nextState.name}: Cost so far: {costSoFar}, ActionCost: {actionCost} PathCost:  {pathCost}")
+        return pathCost
     
     """ HERE """
 
