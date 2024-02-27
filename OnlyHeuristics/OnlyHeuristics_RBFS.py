@@ -3,13 +3,14 @@ from State import State
 from Problem import GraphProblem
 import json, numpy as np
 verbose = False
+verboseStates = True
 verboseExpanded = False
 print("\nWELCOME TO RECURSIVE BEST FIRST SEARCH! (only heuristics)")
 
 with open('./OnlyHeuristics/data.json') as file:
     data = json.load(file)
 
-testProblemA = GraphProblem(State("A"), State("E"), data["testDataOneE"])
+testProblemA = GraphProblem(State("A"), State("B"), data["testDataOneE"])
 testProblemB = GraphProblem(State("A"), State("E"), data["testDataTwoE"])
 
 testDataLastNode = GraphProblem(State("A"), State("O"), data["testDataLastNode"])
@@ -24,6 +25,7 @@ def RecursiveBestFirstSearch(problem: GraphProblem) -> str:
     # Initialize search with initial Node and start recursion
     rbfsResult = RBFS(problem, Node(problem.initialState), float('inf'))
     if rbfsResult[0] == None:
+        if verboseStates : print("FAILURE No solution found")
         return "No solution found"
     
     return f"Here is the result: {problem.initialState.name} -> {rbfsResult[0].getSolution()}"
@@ -33,13 +35,15 @@ def RBFS(problem : GraphProblem, node : Node, f_limit) -> Node:
 
     # Check if node is the goal
     if problem.goalTest(node.state):
+        if verboseStates : print("GOAL REACHED")
         return node, node.fCost 
     
     # Expand the node: get initialized children
     children = node.expand(problem, verbose)
 
-    # If there are no more children, return None and infinity (no solution found)
+    # If there are no more children, return None and infinity
     if len(children) == 0:
+        if verboseStates : print("NO MORE CHILDREN")
         return None, np.inf
     
     for child in children:
@@ -53,6 +57,7 @@ def RBFS(problem : GraphProblem, node : Node, f_limit) -> Node:
 
         # If the best node's fCost is greater than the f_limit, return None and the f_limit (so the parent can choose the next best node to expand on)
         if best.fCost > f_limit:
+            if verboseStates : print("BEST HIGHER F LIMIT")
             return None, best.fCost
         
         # Get the second best node
@@ -65,15 +70,16 @@ def RBFS(problem : GraphProblem, node : Node, f_limit) -> Node:
             return None, np.inf
         
         if result is not None:
+            if verboseStates : print("RESULTING")
             return result, best.fCost
 
-if verbose : print("\nTEST A\n")   
+if verboseStates : print("\nTEST A\n")   
 resultA = RecursiveBestFirstSearch(testProblemA)
-if verbose : print("\nTEST B\n")   
+if verboseStates : print("\nTEST B\n")   
 resultB = RecursiveBestFirstSearch(testProblemB)
-if verbose : print("\nTEST LAST NODE\n")
+if verboseStates : print("\nTEST LAST NODE\n")
 resultC = RecursiveBestFirstSearch(testDataLastNode)
-if verbose : print("\nPRESENTATION\n")   
+if verboseStates : print("\nPRESENTATION\n")   
 presentationResults = RecursiveBestFirstSearch(presentationExample)
 
 resultsToShow = [[resultA, f"Results A from {testProblemA.initialState.name} to {testProblemA.goalState.name}"], [resultB, f"Results B from {testProblemB.initialState.name} to {testProblemB.goalState.name}"], [resultC, f"Results C from {testDataLastNode.initialState.name} to {testDataLastNode.goalState.name}"], [presentationResults, f"Presentation Example Results from {presentationExample.initialState.name} to {presentationExample.goalState.name}"]]
@@ -89,7 +95,7 @@ def nodesString() -> str:
 
     return nodesString
 
-print("\n\nRESULTS")
+print("\n\n** RESULTS **")
 for result in resultsToShow:
     if verboseExpanded:
         print(f"{result[1]}", result[0], f"All #{len(allExpandedNodes)} expanded nodes: {nodesString()}")

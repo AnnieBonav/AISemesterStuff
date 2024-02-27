@@ -20,6 +20,16 @@ class Graph:
         if not directed:
             self.make_undirected()
 
+    def get(self, a, b=None):
+        """Return a link distance or a dict of {node: distance} entries.
+        .get(a,b) returns the distance or None;
+        .get(a) returns a dict of {node: distance} entries, possibly {}."""
+        links = self.graph_dict.setdefault(a, {})
+        if b is None:
+            return links
+        else:
+            return links.get(b)
+        
     def addMap(self, map):
         self.map = map
         self.map['lat'] = self.map['lat'].astype(float)
@@ -34,8 +44,18 @@ class Graph:
         city = self.map.loc[self.map['city'] == city]
         return (city['lat'].values[0], city['lng'].values[0])
 
+    def resetAlternativeStates(self):
+        self.map['state'].loc[self.map['state'] == "alternative"] = "closed"
+
     def resetAllStates(self):
-        self.map['state'] = "closed"
+        self.map['state'].loc[self.map['state'] != "alternative"] = "closed"
+        # self.map['state'] = "closed"
+        """
+        if alternative <= flimit:
+            romaniaMap.resetAlternativeStates()
+            romaniaMap.updateState(children[1].state, "alternative")
+            time.sleep(1)
+        """
 
     def make_undirected(self):
         """Make a digraph into an undirected graph by adding symmetric edges."""
@@ -53,16 +73,6 @@ class Graph:
     def connect1(self, A, B, distance):
         """Add a link from A to B of given distance, in one direction only."""
         self.graph_dict.setdefault(A, {})[B] = distance
-
-    def get(self, a, b=None):
-        """Return a link distance or a dict of {node: distance} entries.
-        .get(a,b) returns the distance or None;
-        .get(a) returns a dict of {node: distance} entries, possibly {}."""
-        links = self.graph_dict.setdefault(a, {})
-        if b is None:
-            return links
-        else:
-            return links.get(b)
 
     def nodes(self):
         """Return a list of nodes in the graph."""

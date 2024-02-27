@@ -10,7 +10,7 @@ runVisualization = True
 
 # waiting times for the visualization
 waitingStart = 1 # 3
-waitingComplete = 1 # 5
+waitingComplete = 3 # 5
 waitingParent = 1 # 2
 
 print("\nWELCOME to Recursive Best First Search (RBFS)")
@@ -144,6 +144,7 @@ def playVisualization():
         white = (255, 255, 255)
         pink = (235, 50, 180)
         orange = (245, 115, 0)
+        purple = (128, 0, 128)
         
         font = pygame.font.Font(None, 36)
         titleText = font.render(f"{startNode}'s Map", True, black)
@@ -214,6 +215,8 @@ def playVisualization():
                         color = pink
                     case "goal":
                         color = orange
+                    case "alternative":
+                        color = purple
                     case _:
                         color = gray
                 pygame.draw.circle(screen, color, (int(lng), int(lat)), 8)
