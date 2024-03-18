@@ -1,14 +1,18 @@
 import math, random
 from HelperFunctions import saveDataToCsv
+import matplotlib.pyplot as plt
 
 path = "SphereFunction/SimulatedAnnealing.csv"
 
 def sphereFunction(x):
     return sum([xi**2 for xi in x])
 
+import matplotlib.pyplot as plt
+
 def simulatedAnnealing(initialSolution, temperature, coolingRate, numIterations):
     current_solution = initialSolution
     bestSolution = current_solution
+    costs = []  # List to store the cost of the best solution in each iteration
 
     for i in range(numIterations):
         temperature *= coolingRate
@@ -27,11 +31,19 @@ def simulatedAnnealing(initialSolution, temperature, coolingRate, numIterations)
             # If the candidate solution is the best so far, update the best solution
             if candidate_cost < sphereFunction(bestSolution):
                 bestSolution = candidate_solution
+                costs.append(candidate_cost)  # Add the cost of the new best solution to the list
         else:
             # If the candidate solution is worse, accept it with a certain probability
             acceptance_probability = math.exp((current_cost - candidate_cost) / temperature)
             if random.random() < acceptance_probability:
                 current_solution = candidate_solution
+
+    # Plot the cost of the best solution in each iteration
+    plt.plot(costs)
+    plt.ylabel('Cost')
+    plt.xlabel('Iteration')
+    plt.show()
+    plt.clf()
 
     return bestSolution
 
