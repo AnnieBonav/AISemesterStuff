@@ -1,0 +1,6 @@
+"Baseline solution from: [0, 0, 0],Temperature: 100,Cooling Rate: 0.95,Number of iterations: 1000,Best Solution: [0, 0, 0],",2024-03-18 10:02:17
+"Testing solution from: [4, -3, 9],Temperature: 100,Cooling Rate: 0.95,Number of iterations: 1000,Best Solution: [-0.055831102496956, -0.0837679811263845, -0.12200362321539804],",2024-03-18 10:02:17
+"Random Solution from: [8.318227620944608, 2.199034687176873, 9.660014556410783],Temperature: 100,Cooling Rate: 0.95,Number of Iterations: 10,Best Solution: [6.4587195472664085, 1.5925087304494967, 8.110950224183378],",2024-03-18 10:02:17
+"Baseline solution from: [0, 0, 0],Temperature: 100,Cooling Rate: 0.95,Number of iterations: 1000,Best Solution: [0, 0, 0],",2024-03-18 10:03:09
+"Testing solution from: [4, -3, 9],Temperature: 50,Cooling Rate: 0.9,Number of iterations: 500,Best Solution: [-0.08343866458255511, 0.021427776519659103, 0.10465478047101984],",2024-03-18 10:03:09
+"Random Solution from: [-3.1353471473942385, -0.5453743693005908, 4.420831212027723],Temperature: 100,Cooling Rate: 0.95,Number of Iterations: 10,Best Solution: [-2.24665720858628, 0.5987279633507003, 4.289841080901538],",2024-03-18 10:03:09
