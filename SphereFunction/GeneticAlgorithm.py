@@ -1,4 +1,4 @@
-import random
+import random, matplotlib.pyplot as plt
 
 # Define the sphere function
 def sphereFunction(x):
@@ -52,6 +52,9 @@ class GeneticAlgorithm:
 
     def evolve(self, numGenerations):
         self.initializePopulation()
+        bestFitnesses = []
+        worstFItnesses = []
+        avgFitnesses = []
         for _ in range(numGenerations):
             fitnessScores = self.evaluate_population()
             parents = self.selectParents(fitnessScores)
@@ -59,13 +62,28 @@ class GeneticAlgorithm:
             child = self.mutate(child)
             self.population.append(child)
             self.population.pop(0)
+            bestFitnesses.append(min(fitnessScores))
+            worstFItnesses.append(max(fitnessScores))
+            avgFitnesses.append(sum(fitnessScores) / len(fitnessScores))
         bestIndividual = min(self.population, key = lambda x: sphereFunction(x))
-        return bestIndividual
+        return bestIndividual, bestFitnesses, worstFItnesses, avgFitnesses
 
 def testing(populationSize = 100, numDimensions = 2, mutationRate = 0.01, crossoverRate = 0.8, numGenerations = 100):
     ga = GeneticAlgorithm(populationSize, numDimensions, mutationRate, crossoverRate)
-    bestSolution = ga.evolve(numGenerations)
+    bestSolution, bestFitnesses, worstFitnesses, avgFitnesses = ga.evolve(numGenerations)
     print("Best solution:", bestSolution)
     print("Fitness score:", sphereFunction(bestSolution))
+
+    # Plotting
+    plt.figure(figsize=(12, 6))
+    plt.plot(bestFitnesses, label='Best Fitness')
+    plt.plot(worstFitnesses, label='Worst Fitness')
+    plt.plot(avgFitnesses, label='Average Fitness')
+    plt.legend()
+    plt.title('Fitness through the Generations')
+    plt.xlabel('Generations')
+    plt.ylabel('Fitness')
+    plt.show()
+    plt.clf()
 
 testing()
