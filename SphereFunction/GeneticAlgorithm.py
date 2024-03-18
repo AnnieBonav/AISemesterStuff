@@ -1,11 +1,13 @@
 import random, matplotlib.pyplot as plt
 
-# Define the sphere function
+# Define the sphere function, which is used as the fitness function
+# The goal of the genetic algorithm is to find the input to this function that produces the lowest output
 def sphereFunction(x):
     return sum([xi**2 for xi in x])
 
 # Define the GeneticAlgorithm class
 class GeneticAlgorithm:
+    # Initialize the genetic algorithm with the population size, number of dimensions, mutation rate, and crossover rate
     def __init__(self, populationSize, numDimensions, mutationRate, crossoverRate):
         self.populationSize = populationSize
         self.numDimensions = numDimensions
@@ -13,15 +15,18 @@ class GeneticAlgorithm:
         self.crossoverRate = crossoverRate
         self.population = []
 
+    # Initialize the population with random individuals
     def initializePopulation(self):
         self.population = [[random.uniform(-5.12, 5.12) for _ in range(self.numDimensions)] for _ in range(self.populationSize)]
 
+    # Evaluate the fitness of each individual in the population using the sphere function
     def evaluate_population(self):
         fitnessScores = []
         for individual in self.population:
             fitnessScores.append(sphereFunction(individual))
         return fitnessScores
 
+    # Select parents from the population using fitness proportionate selection
     def selectParents(self, fitnessScores):
         parents = []
         total_fitness = sum(fitnessScores)
@@ -35,6 +40,7 @@ class GeneticAlgorithm:
                     break
         return parents
 
+    # Perform crossover on the parents to produce a child
     def crossover(self, parents):
         child = []
         for i in range(self.numDimensions):
@@ -44,12 +50,14 @@ class GeneticAlgorithm:
                 child.append(parents[1][i])
         return child
 
+    # Perform mutation on the child
     def mutate(self, child):
         for i in range(self.numDimensions):
             if random.random() < self.mutationRate:
                 child[i] = random.uniform(-5.12, 5.12)
         return child
 
+    # Evolve the population for a certain number of generations
     def evolve(self, numGenerations):
         self.initializePopulation()
         bestFitnesses = []
