@@ -4,9 +4,13 @@ numDimensions = 10
 printAllChanges = False
 showPlots = False
 showTestsPlots = True
+# What roullette selection does is to select a random number between 0 and the sum of all fitnesses, and then iterate through the fitnesses summing them up until the sum is greater than the random number. The individual that corresponds to that fitness is the one selected.
 # selectionMethod = "RouletteSelection"
+
+# Tournament selection is a selection method where a number of individuals are selected at random from the population and the best individual from that group is chosen as the parent. This process is repeated to select the second parent.
 selectionMethod = "TournamentSelection"
 
+# The basic replacement method is a generational replacement method where the entire population is replaced by the offspring at each generation.
 # evolveMethod = "BasicReplacement"
 evolveMethod = "ElitismAndGenerational"
 
@@ -44,10 +48,10 @@ class GeneticAlgorithm:
         parents = []
         match selectionMethod:
             case "RouletteSelection":
-                total_fitness = sum(fitnessScores)
+                totalFitness = sum(fitnessScores)
                 for _ in range(2):
                     cumulativeFitness = 0
-                    randomValue = random.uniform(0, total_fitness)
+                    randomValue = random.uniform(0, totalFitness)
                     for i, fitness in enumerate(fitnessScores):
                         cumulativeFitness += fitness
                         if cumulativeFitness >= randomValue:

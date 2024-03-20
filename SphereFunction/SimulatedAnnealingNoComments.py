@@ -2,24 +2,30 @@ import math, random
 from HelperFunctions import saveDataToCsv
 import matplotlib.pyplot as plt
 import time
+import matplotlib.pyplot as plt
+from HelperFunctions import visualization
 
 path = "SphereFunction/SimulatedAnnealing.csv"
 
+# The cost is the sum of the squares of the elements of the state
 def sphereFunction(x):
     return sum([xi**2 for xi in x])
 
-import matplotlib.pyplot as plt
-
 onlyRunRandomOne = True
-
+minTemperature = 0.01
 # Defines the degrees that will be used to test the simulated annealing, these will become the length on the array of the initial state
 degree = 5
-
+if(degree == 3):
+    visualization()
+    
 # The cooling rate is the rate (speed) at which the temperature is reduced, the closer to 1, the slower the temperature is reduced
-coolingRate = 0.5
+coolingRate = 0.95
+
+# The temperature is the initial temperature of the system, the higher the temperature, the more likely the algorithm is to accept worse solutions
+temperature = 100
 
 # The Simulated Annealing algorithm is a probabilistic technique used for finding an approximate solution to an optimization problem
-def simulatedAnnealing(initialState, temperature, coolingRate, numIterations):
+def simulatedAnnealing(initialState, temperature, coolingRate, numIterations, searchRange = 1):
     initialTemperature = temperature
     
     initialState[0] = round(initialState[0], 3)
@@ -35,7 +41,7 @@ def simulatedAnnealing(initialState, temperature, coolingRate, numIterations):
         temperature *= coolingRate
 
         # Generate a new candidate state by perturbing the current state
-        candidateState = [xi + random.uniform(-1, 1) for xi in currentState]
+        candidateState = [xi + random.uniform(-searchRange, searchRange) for xi in currentState]
 
         # Calculate the cost (fitness) of the current and candidate states
         currentCost = sphereFunction(currentState)
@@ -51,8 +57,9 @@ def simulatedAnnealing(initialState, temperature, coolingRate, numIterations):
                 costs.append(candidateCost)  # Add the cost of the new best state to the list, for visualization
         else:
             # If the candidate state is worse, accept it with a certain probability
-            if temperature > 0:
-                acceptanceProbability = math.exp((currentCost - candidateCost) / temperature)
+            if temperature <= 0:
+                temperature = minTemperature
+            acceptanceProbability = math.exp((currentCost - candidateCost) / temperature)
             if random.random() < acceptanceProbability:
                 currentState = candidateState
 
@@ -61,10 +68,12 @@ def simulatedAnnealing(initialState, temperature, coolingRate, numIterations):
     
 
     # Plot the cost of the best solution in each iteration
+    bestState = [round(x, 3) for x in bestState]
+
     plt.figure(figsize=(10, 5))
     plt.plot(costs)
     plt.subplots_adjust(left=0.1, right=0.9, top=0.8, bottom=0.1)
-    plt.title(f"Simulated Annealing\nInitial Temp: {initialTemperature}, Final Temp: {round(temperature, 3)}\nInitial Solution: {initialState}, Final Solution: {round(currentCost, 3)}\nCooling Rate: {coolingRate}, Time it took: {finalTime}")
+    plt.title(f"Simulated Annealing\nInitial Temp: {initialTemperature}, Final Temp: {round(temperature, 3)}\nInitial State: {initialState}, Final State: {bestState}\nFinal Cost: {round(currentCost, 3)}, Cooling Rate: {coolingRate}, Time it took: {finalTime}")
     plt.ylabel('Cost')
     plt.xlabel(f'Iteration (Total: {numIterations})')
     plt.show()
@@ -73,7 +82,7 @@ def simulatedAnnealing(initialState, temperature, coolingRate, numIterations):
 
     return bestState
 
-def baseline(temperature = 100, coolingRate = 0.95, numIterations = 1000, degree = 3):
+def baseline(temperature = 100, coolingRate = 0.95, numIterations = 1000):
     baselineSolution = [0, 0, 0]
     bestState = simulatedAnnealing(baselineSolution, temperature, coolingRate, numIterations)
     saveDataToCsv(path, [f"Baseline solution from: {baselineSolution}", f"Temperature: {temperature}", f"Cooling Rate: {coolingRate}", f"Number of iterations: {numIterations}", f"Best Solution: {bestState}"])
@@ -101,9 +110,9 @@ def randomSolution(temperature = 100, coolingRate = 0.95, numIterations = 1000, 
 
 numIterations = 10
 if not onlyRunRandomOne:
-    baseline()
-    for i in range(5):
-        testing(temperature = 100, coolingRate = coolingRate, numIterations = numIterations, degree = degree)
+    # baseline()
+    for i in range(7):
+        testing(temperature = temperature, coolingRate = coolingRate, numIterations = numIterations, degree = degree)
         numIterations *= 10
 
 numIterations = 10
