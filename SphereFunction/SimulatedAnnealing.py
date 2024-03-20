@@ -1,6 +1,7 @@
 import math, random
 from HelperFunctions import saveDataToCsv
 import matplotlib.pyplot as plt
+import time
 
 path = "SphereFunction/SimulatedAnnealing.csv"
 
@@ -9,77 +10,94 @@ def sphereFunction(x):
 
 import matplotlib.pyplot as plt
 
+onlyRunRandomOne = True
+
 def simulatedAnnealing(initialSolution, temperature, coolingRate, numIterations):
-    current_solution = initialSolution
-    bestSolution = current_solution
+    initialSolution[0] = round(initialSolution[0], 3)
+    initialSolution[1] = round(initialSolution[1], 3)
+    initialSolution[2] = round(initialSolution[2], 3)
+
+    startTime = time.time()
+    initialTemperature = temperature
+    currentSolution = initialSolution
+    bestSolution = currentSolution
     costs = []  # List to store the cost of the best solution in each iteration
 
     for i in range(numIterations):
         temperature *= coolingRate
 
         # Generate a new candidate solution by perturbing the current solution
-        candidate_solution = [xi + random.uniform(-1, 1) for xi in current_solution]
+        candidateSolution = [xi + random.uniform(-1, 1) for xi in currentSolution]
 
         # Calculate the cost (fitness) of the current and candidate solutions
-        current_cost = sphereFunction(current_solution)
-        candidate_cost = sphereFunction(candidate_solution)
+        currentCost = sphereFunction(currentSolution)
+        candidateCost = sphereFunction(candidateSolution)
 
         # If the candidate solution is better, accept it as the new current solution
-        if candidate_cost < current_cost:
-            current_solution = candidate_solution
+        if candidateCost < currentCost:
+            currentSolution = candidateSolution
 
             # If the candidate solution is the best so far, update the best solution
-            if candidate_cost < sphereFunction(bestSolution):
-                bestSolution = candidate_solution
-                costs.append(candidate_cost)  # Add the cost of the new best solution to the list
+            if candidateCost < sphereFunction(bestSolution):
+                bestSolution = candidateSolution
+                costs.append(candidateCost)  # Add the cost of the new best solution to the list
         else:
             # If the candidate solution is worse, accept it with a certain probability
-            acceptance_probability = math.exp((current_cost - candidate_cost) / temperature)
-            if random.random() < acceptance_probability:
-                current_solution = candidate_solution
+            acceptanceProbability = math.exp((currentCost - candidateCost) / temperature)
+            if random.random() < acceptanceProbability:
+                currentSolution = candidateSolution
+
+    endTime = time.time()
+    finalTime = round(endTime - startTime, 3)
+    
+    plt.figure(figsize=(10, 5))
 
     # Plot the cost of the best solution in each iteration
     plt.plot(costs)
+    plt.subplots_adjust(left=0.1, right=0.9, top=0.8, bottom=0.1)
+    plt.title(f"Simulated Annealing\nInitial Temp: {initialTemperature}, Final Temp: {round(temperature, 3)}\nInitial Solution: {initialSolution}, Final Solution: {round(currentCost, 3)}\nCooling Rate: {coolingRate}, Time it took: {finalTime}")
     plt.ylabel('Cost')
-    plt.xlabel('Iteration')
+    plt.xlabel(f'Iteration (Total: {numIterations})')
     plt.show()
     plt.clf()
+    plt.close()
 
     return bestSolution
 
-def baseline():
-    baselineSolution = [0, 0, 0]  # Initial solution
-    print("\nInitial solution:", baselineSolution)
-
-    temperature = 100  # Initial temperature
-    coolingRate = 0.95  # Cooling rate
-    numIterations = 1000  # Number of iterations
-
+def baseline(temperature = 100, coolingRate = 0.95, numIterations = 1000):
+    baselineSolution = [0, 0, 0]
     bestSolution = simulatedAnnealing(baselineSolution, temperature, coolingRate, numIterations)
-    print("Baseline Best solution:", bestSolution)
-    print("Baseline Best cost:", sphereFunction(bestSolution))
+    
+    print("Initial solution:", baselineSolution, "Baseline Best solution:", bestSolution, "Baseline Best cost:", sphereFunction(bestSolution))
     saveDataToCsv(path, [f"Baseline solution from: {baselineSolution}", f"Temperature: {temperature}", f"Cooling Rate: {coolingRate}", f"Number of iterations: {numIterations}", f"Best Solution: {bestSolution}"])
-
-baseline()
 
 def testing(temperature = 100, coolingRate = 0.95, numIterations = 1000):
     initialSolution = [4, -3, 9]
-    print("\nTesting initial solution:", initialSolution)
-
     bestSolution = simulatedAnnealing(initialSolution, temperature, coolingRate, numIterations)
-    print("Best solution:", bestSolution)
-    print("Best cost:", sphereFunction(bestSolution))
+    
+    print("Testing initial solution:", initialSolution, "Best solution:", bestSolution, "Best cost:", sphereFunction(bestSolution))
     saveDataToCsv(path, [f"Testing solution from: {initialSolution}", f"Temperature: {temperature}", f"Cooling Rate: {coolingRate}", f"Number of iterations: {numIterations}", f"Best Solution: {bestSolution}"])
 
-testing(temperature = 50, coolingRate = 0.90, numIterations = 500)
-
-def randomSolution(temperature = 100, coolingRate = 0.95, numIterations = 1000):
-    initialSolution = [random.uniform(-10, 10), random.uniform(-10, 10), random.uniform(-10, 10)]
-    print("\nInitial solution:", initialSolution)
-
+def randomSolution(temperature = 100, coolingRate = 0.95, numIterations = 1000, space = 10, degree = 3):
+    initialTemperature = temperature
+    initialSolution = []
+    for _ in range(degree):
+        initialSolution.append(round(random.uniform(-space, space), 3))
     bestSolution = simulatedAnnealing(initialSolution, temperature, coolingRate, numIterations)
-    print("Best solution:", bestSolution)
-    print("Best cost:", sphereFunction(bestSolution))
+    
+    print("Initial solution:", initialSolution, "Best solution:", bestSolution, "Best cost:", sphereFunction(bestSolution), "Initial Temperature:", initialTemperature, "Cooling Rate:", coolingRate, "Number of iterations:", numIterations)
     saveDataToCsv(path, [f"Random Solution from: {initialSolution}", f"Temperature: {temperature}", f"Cooling Rate: {coolingRate}", f"Number of Iterations: {numIterations}", f"Best Solution: {bestSolution}"])
 
-randomSolution(numIterations = 10)
+numIterations = 10
+if not onlyRunRandomOne:
+    baseline()
+    for i in range(5):
+        testing(temperature = 100, coolingRate = 0.90, numIterations = numIterations)
+        numIterations *= 10
+
+numIterations = 10
+# space = 100
+space = 10000
+for i in range(5):
+    randomSolution(numIterations = numIterations, space = space)
+    numIterations *= 10
