@@ -169,7 +169,7 @@ def testMutationRate():
         bestSolution, fitnessScore = testing(numDimensions = numDimensions, mutationRate = mutationRate)
         mutationResults.append(fitnessScore)
         mutationRate += 0.01
-mutationResults = testMutationRate()
+    return mutationResults
 
 def testCrossoverRate():
     crossoverRate = 0.02
@@ -179,7 +179,7 @@ def testCrossoverRate():
         bestSolution, fitnessScore = testing(numDimensions = numDimensions, crossoverRate = crossoverRate)
         crossoverResults.append(fitnessScore)
         crossoverRate += 0.02
-crossoverResults = testCrossoverRate()
+    return crossoverResults
 
 def testPopulationSize():
     populationSize = 50
@@ -189,7 +189,7 @@ def testPopulationSize():
         bestSolution, fitnessScore = testing(populationSize = populationSize, numDimensions = numDimensions)
         populationSizeResults.append(fitnessScore)
         populationSize += 50
-populationSizeResults = testPopulationSize()
+    return populationSizeResults
 
 def testNumGenerations(numGenerations = 50):
     print("\nCHANGES NUMBER OF GENERATIONS")
@@ -198,20 +198,29 @@ def testNumGenerations(numGenerations = 50):
         bestSolution, fitnessScore = testing(numGenerations = numGenerations, numDimensions = numDimensions)
         numGenerationsResults.append(fitnessScore)
         numGenerations += 50
-numGenerationsResults = testNumGenerations()
+    return numGenerationsResults
 
 def testNumGenerationsAndPopulationSize(numGenerations = 50, populationSize = 50):
     print("\nCHANGES NUMBER OF GENERATIONS AND POPULATION SIZE")
     numGenerationsAndPopulationSizeResults = []
-    for _ in range(40):
+    for _ in range(10):
         bestSolution, fitnessScore = testing(numGenerations = numGenerations, numDimensions = numDimensions)
         numGenerationsAndPopulationSizeResults.append(fitnessScore)
         numGenerations += 50
         populationSize += 50
-numGenerationsAndPopulationSizeResults = testNumGenerationsAndPopulationSize()
+    return numGenerationsAndPopulationSizeResults
 
+mutationResults = testMutationRate()
 plotTests(mutationResults, "Mutation Rate")
+
+crossoverResults = testCrossoverRate()
 plotTests(crossoverResults, "Crossover Rate")
+
+populationSizeResults = testPopulationSize()
 plotTests(populationSizeResults, "Population Size")
+
+numGenerationsResults = testNumGenerations()
 plotTests(numGenerationsResults, "Number of Generations")
+
+numGenerationsAndPopulationSizeResults = testNumGenerationsAndPopulationSize()
 plotTests(numGenerationsAndPopulationSizeResults, "Number of Generations and Population Size")
