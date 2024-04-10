@@ -1,4 +1,7 @@
-import random, matplotlib.pyplot as plt
+import random, matplotlib.pyplot as plt, math
+import OptimizationFunctions as optFunc
+
+# The goal of the genetic algorithm is to find the input to this function that produces the lowest output
 
 numDimensions = 10
 printAllChanges = False
@@ -14,21 +17,21 @@ selectionMethod = "TournamentSelection"
 # evolveMethod = "BasicReplacement"
 evolveMethod = "ElitismAndGenerational"
 
-# Define the sphere function, which is used as the fitness function
-# The goal of the genetic algorithm is to find the input to this function that produces the lowest output
-def sphereFunction(x):
-    return sum([xi**2 for xi in x])
+# Select the function to optimize, from the following options:
+# selectedFunction = optFunc.sphereFunction
+selectedFunction = optFunc.eggHolderFunction
 
 # Define the GeneticAlgorithm class
 class GeneticAlgorithm:
     # Initialize the genetic algorithm with the population size, number of dimensions, mutation rate, and crossover rate
-    def __init__(self, populationSize, numDimensions, mutationRate, crossoverRate, tournamentSize = 5, elitismCount = 2):
+    def __init__(self, functionToOptimize, populationSize, numDimensions, mutationRate, crossoverRate, tournamentSize = 5, elitismCount = 2):
         self.populationSize = populationSize
         self.numDimensions = numDimensions
         self.mutationRate = mutationRate
         self.crossoverRate = crossoverRate
         self.tournamentSize = tournamentSize  # For tournament selection
         self.elitismCount = elitismCount # For elitism
+        self.functionToOptimize = functionToOptimize
         self.population = []
 
     # Initialize the population with random individuals
@@ -40,7 +43,7 @@ class GeneticAlgorithm:
     def evaluatePopulation(self):
         fitnessScores = []
         for individual in self.population:
-            fitnessScores.append(sphereFunction(individual))
+            fitnessScores.append(self.functionToOptimize(individual))
         return fitnessScores
 
     # Select parents from the population using fitness proportionate selection
@@ -60,7 +63,7 @@ class GeneticAlgorithm:
             case "TournamentSelection":
                 for _ in range(2):  # Select two parents
                     tournament = random.sample(self.population, self.tournamentSize)
-                    best = min(tournament, key=lambda individual: sphereFunction(individual))
+                    best = min(tournament, key=lambda individual: self.functionToOptimize(individual))
                     parents.append(best)
         return parents
 
@@ -84,6 +87,7 @@ class GeneticAlgorithm:
         if printAllChanges: print(f"\nStarts mutation with Child: {child}")
         for i in range(self.numDimensions):
             if random.random() < self.mutationRate:
+                # TODO: Change limits so each function has its own implementatio (and limits)
                 child[i] = random.uniform(-5.12, 5.12)
                 if printAllChanges: print(f"Mutated at index {i} to {child[i]}")
         if printAllChanges: print("Mutated Child:", child)
@@ -108,11 +112,11 @@ class GeneticAlgorithm:
                     bestFitnesses.append(min(fitnessScores))
                     worstFItnesses.append(max(fitnessScores))
                     avgFitnesses.append(sum(fitnessScores) / len(fitnessScores))
-                bestIndividual = min(self.population, key = lambda x: sphereFunction(x))
+                bestIndividual = min(self.population, key = lambda x: self.functionToOptimize(x))
             case "ElitismAndGenerational":
                 for _ in range(numGenerations):
                     fitnessScores = self.evaluatePopulation()
-                    newPopulation = sorted(self.population, key=lambda individual: sphereFunction(individual))[:self.elitismCount]
+                    newPopulation = sorted(self.population, key=lambda individual: self.functionToOptimize(individual))[:self.elitismCount]
                     
                     while len(newPopulation) < self.populationSize:
                         parents = self.selectParents(fitnessScores)  # Ensure your selection method is compatible
@@ -122,14 +126,21 @@ class GeneticAlgorithm:
 
                     self.population = newPopulation
                     
-                    bestFitnesses.append(sphereFunction(newPopulation[0]))  # Assuming the first individual is the best due to sorting
-                    worstFItnesses.append(sphereFunction(newPopulation[-1]))  # Assuming the last individual is the worst due to sorting
+                    bestFitnesses.append(self.functionToOptimize(newPopulation[0]))  # Assuming the first individual is the best due to sorting
+                    worstFItnesses.append(self.functionToOptimize(newPopulation[-1]))  # Assuming the last individual is the worst due to sorting
                     avgFitnesses.append(sum(fitnessScores) / len(fitnessScores))
                 bestIndividual = self.population[0]  # The best individual
         return bestIndividual, bestFitnesses, worstFItnesses, avgFitnesses
 
+# TODO: Change to be part of the class
 def testing(populationSize = 100, numDimensions = 2, mutationRate = 0.01, crossoverRate = 0.8, numGenerations = 100):
-    ga = GeneticAlgorithm(populationSize, numDimensions, mutationRate, crossoverRate)
+    ga = GeneticAlgorithm(
+        functionToOptimize = selectedFunction,
+        populationSize= populationSize,
+        numDimensions = numDimensions,
+        mutationRate = mutationRate,
+        crossoverRate = crossoverRate)
+    
     bestSolution, bestFitnesses, worstFitnesses, avgFitnesses = ga.evolve(numGenerations)
 
     bestSolution = [round(x, 5) for x in bestSolution]
@@ -138,7 +149,7 @@ def testing(populationSize = 100, numDimensions = 2, mutationRate = 0.01, crosso
     avgFitnesses = [round(x, 5) for x in avgFitnesses]
 
     if printAllChanges: print(f"\nRESULTS")
-    fitnessScore = round(sphereFunction(bestSolution), 5)
+    fitnessScore = round(selectedFunction(bestSolution), 5)
     print(f"Best solution: {bestSolution}, Fitness score:", {fitnessScore})
 
     # Plotting
