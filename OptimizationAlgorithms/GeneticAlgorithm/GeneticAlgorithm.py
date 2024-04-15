@@ -4,6 +4,7 @@ sys.path.append(parent_path)
 
 from OptimizationFunctions import FunctionToOptimize, FUNCTIONS
 from AlgData import AlgData
+import numpy as np
 
 # Define the GeneticAlgorithm class
 class GeneticAlgorithm:
@@ -126,14 +127,22 @@ class GeneticAlgorithm:
         plt.close()
 
     def plotTests(self, testsResults, xLabel, showTestsPlots = False):
+        # Generate x values as whole numbers
+        x_values = np.arange(1, len(testsResults) + 1)
+
         plt.figure(figsize=(12, 6))
-        plt.plot(testsResults)
+        plt.plot(x_values, testsResults)
         plt.title(f"Fitness through the change in {xLabel}")
         plt.xlabel(f"{xLabel}")
+        plt.xticks(x_values)  # Set x-axis ticks to be the whole numbers
         plt.ylabel('Fitness')
         if showTestsPlots: plt.show()
         plt.clf()
         plt.close()
+
+    #
+    # TESTING DIFFERENT PARAMETERS
+    #
 
     # Can sent a new algData (to not use the default values)
     def test(self, algData: None | AlgData = None):
@@ -155,19 +164,91 @@ class GeneticAlgorithm:
 
         return bestSolution, fitnessScore
     
-    def testMutationRate(self, algData: None | AlgData = None, numOfIterations = 5):
+    def testMutationRate(self, algData: None | AlgData = None, mutationRate = 0.01, numOfIterations = 5):
         if algData is not None:
             self.algData = algData
         originalMutationRate = self.algData.mutationRate
-        self.algData.mutationRate = 0.01
+        self.algData.mutationRate = mutationRate
+
         print("\nCHANGES MUTATION RATE")
         mutationResults = []
         for _ in range(numOfIterations):
-            print("Mutation rate:", self.algData.mutationRate)
+            print("Mutation Rate:", self.algData.mutationRate)
             bestSolution, fitnessScore = self.test(self.algData)
             mutationResults.append(fitnessScore)
-            self.algData.mutationRate += 0.01
+            self.algData.mutationRate += mutationRate
         
         # Resets the mutation rate
         self.algData.mutationRate = originalMutationRate
         self.plotTests(mutationResults, "Mutation Rate", self.algData.showPlots)
+
+    def testCrossoverRate(self, algData: None | AlgData = None, crossoverRate = 0.02, numOfIterations = 5):
+        if algData is not None:
+            self.algData = algData
+        originalCrossoverRate = self.algData.crossoverRate
+        self.algData.crossoverRate = crossoverRate
+
+        print("\nCHANGES CROSSOVER RATE")
+        crossoverResults = []
+        for _ in range(numOfIterations):
+            print("Crossover Rate:", self.algData.mutationRate)
+            bestSolution, fitnessScore = self.test(self.algData)
+            crossoverResults.append(fitnessScore)
+            self.algData.crossoverRate += crossoverRate
+
+        self.algData.crossoverRate = originalCrossoverRate
+        self.plotTests(crossoverResults, "Crossover Rate", self.algData.showPlots)
+
+    def testPopulationSize(self, algData: None | AlgData = None, populationRate = 50, numOfIterations = 5):
+        if algData is not None:
+            self.algData = algData
+        originalPopulationSize = self.algData.populationSize
+        self.algData.populationSize = populationRate
+
+        print("\nCHANGES POPULATION SIZE")
+        populationSizeResults = []
+        for _ in range(numOfIterations):
+            bestSolution, fitnessScore = self.test(self.algData)
+            populationSizeResults.append(fitnessScore)
+            self.algData.populationSize += populationRate
+        self.algData.populationSize = originalPopulationSize
+
+        self.plotTests(populationSizeResults, "Population Size", self.algData.showPlots)
+
+    def testNumGenerations(self, algData: None | AlgData = None, numGenerationsRate = 50, numOfIterations = 10):
+        if algData is not None:
+            self.algData = algData
+        originalNumGenerations = self.algData.numGenerations
+        self.algData.numGenerations = numGenerationsRate
+
+        print("\nCHANGES NUMBER OF GENERATIONS")
+        numGenerationsResults = []
+        for _ in range(numOfIterations):
+            print("Number of Generations:", self.algData.numGenerations)
+            bestSolution, fitnessScore = self.test(self.algData)
+            numGenerationsResults.append(fitnessScore)
+            self.algData.numGenerations += numGenerationsRate
+
+        self.algData.numGenerations = originalNumGenerations
+        self.plotTests(numGenerationsResults, "Number of Generations Rate", self.algData.showPlots)
+
+    def testNumGenerationsAndPopulationSize(self, algData: None | AlgData = None, numGenerations = 50, populationSize = 50, numOfIterations = 10):
+        if algData is not None:
+            self.algData = algData
+        originalNumGenerations = self.algData.numGenerations
+        originalPopulationSize = self.algData.populationSize
+        self.algData.numGenerations = numGenerations
+        self.algData.populationSize = populationSize
+
+        print("\nCHANGES NUMBER OF GENERATIONS AND POPULATION SIZE")
+        numGenerationsAndPopulationSizeResults = []
+        for _ in range(numOfIterations):
+            print(f"Number of Generations: {self.algData.numGenerations}, Population Size: {self.algData.populationSize}")
+            bestSolution, fitnessScore = self.test(self.algData)
+            numGenerationsAndPopulationSizeResults.append(fitnessScore)
+            self.algData.numGenerations += numGenerations
+            self.algData.populationSize += populationSize
+        
+        self.algData.numGenerations = originalNumGenerations
+        self.algData.populationSize = originalPopulationSize
+        self.plotTests(numGenerationsAndPopulationSizeResults, "Number of Generations and Population Size", self.algData.showPlots)

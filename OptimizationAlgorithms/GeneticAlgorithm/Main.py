@@ -53,58 +53,28 @@ favoursBestParents = algData(
 # Using default alg data
 
 # ga.test(defaultAlgData)
-ga.testMutationRate(defaultAlgData, numOfIterations = 30)
+ga.testMutationRate(defaultAlgData,
+                    mutationRate = 0.01,
+                    numOfIterations = 5
+                    )
 
-def testCrossoverRate():
-    crossoverRate = 0.02
-    print("\nCHANGES CROSSOVER RATE")
-    crossoverResults = []
-    for _ in range(5):
-        bestSolution, fitnessScore = testing(numDimensions = numDimensions, crossoverRate = crossoverRate)
-        crossoverResults.append(fitnessScore)
-        crossoverRate += 0.02
-    return crossoverResults
+ga.testCrossoverRate(defaultAlgData,
+                    crossoverRate = 0.02,
+                    numOfIterations = 10
+                    )
 
-def testPopulationSize():
-    populationSize = 50
-    print("\nCHANGES POPULATION SIZE")
-    populationSizeResults = []
-    for _ in range(5):
-        bestSolution, fitnessScore = testing(populationSize = populationSize, numDimensions = numDimensions)
-        populationSizeResults.append(fitnessScore)
-        populationSize += 50
-    return populationSizeResults
+# ga.testPopulationSize(defaultAlgData,
+#                       populationRate = 50,
+#                       numOfIterations = 20
+#                       )
 
-def testNumGenerations(numGenerations = 50):
-    print("\nCHANGES NUMBER OF GENERATIONS")
-    numGenerationsResults = []
-    for _ in range(10):
-        bestSolution, fitnessScore = testing(numGenerations = numGenerations, numDimensions = numDimensions)
-        numGenerationsResults.append(fitnessScore)
-        numGenerations += 50
-    return numGenerationsResults
+# ga.testNumGenerations(defaultAlgData,
+#                       numGenerationsRate = 50,
+#                       numOfIterations = 30
+#                       )
 
-def testNumGenerationsAndPopulationSize(numGenerations = 50, populationSize = 50):
-    print("\nCHANGES NUMBER OF GENERATIONS AND POPULATION SIZE")
-    numGenerationsAndPopulationSizeResults = []
-    for _ in range(10):
-        bestSolution, fitnessScore = testing(numGenerations = numGenerations, numDimensions = numDimensions)
-        numGenerationsAndPopulationSizeResults.append(fitnessScore)
-        numGenerations += 50
-        populationSize += 50
-    return numGenerationsAndPopulationSizeResults
-
-mutationResults = testMutationRate()
-plotTests(mutationResults, "Mutation Rate")
-
-crossoverResults = testCrossoverRate()
-plotTests(crossoverResults, "Crossover Rate")
-
-populationSizeResults = testPopulationSize()
-plotTests(populationSizeResults, "Population Size")
-
-numGenerationsResults = testNumGenerations()
-plotTests(numGenerationsResults, "Number of Generations")
-
-numGenerationsAndPopulationSizeResults = testNumGenerationsAndPopulationSize()
-plotTests(numGenerationsAndPopulationSizeResults, "Number of Generations and Population Size")
+# ga.testNumGenerationsAndPopulationSize(defaultAlgData,
+#                                        populationSize = 50,
+#                                        numGenerations = 50,
+#                                        numOfIterations = 50
+#                                        )
