@@ -1,10 +1,10 @@
 import sys, os
 from AlgData import AlgData as algData
+from GeneticAlgorithm import GeneticAlgorithm
 parent_path = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 sys.path.append(parent_path)
 
 from OptimizationFunctions import FUNCTIONS, FunctionToOptimize
-from GeneticAlgorithm import GeneticAlgorithm
 
 # The goal of the genetic algorithm is to find the input to this function that produces the lowest output
 
@@ -55,53 +55,54 @@ favoursBestParents = algData(
 
 # ga.test(defaultAlgData)
 # Tournament Selection and Elitism and Generational combo work the best when testing the mutation rate because Elitism And Generational makes sure to keep the best individuals and Tournament Selection makes sure to select the best parents
-ga.testMutationRate(defaultAlgData,
-                    mutationRate = 0.01,
-                    numOfIterations = 10,
-                    tests = [
-                        ["RouletteSelection", "BasicReplacement"],
-                        ["RouletteSelection", "ElitismAndGenerational"],
-                        ["TournamentSelection", "BasicReplacement"],
-                        ["TournamentSelection", "ElitismAndGenerational"]
-                        ],
-                    )
+# ga.testMutationRate(defaultAlgData,
+#                     mutationRate = 0.01,
+#                     numOfIterations = 10,
+#                     tests = [
+#                         ["RouletteSelection", "BasicReplacement"],
+#                         ["RouletteSelection", "ElitismAndGenerational"],
+#                         ["TournamentSelection", "BasicReplacement"],
+#                         ["TournamentSelection", "ElitismAndGenerational"]
+#                         ],
+#                     )
 
-ga.testCrossoverRate(defaultAlgData,
-                    crossoverRate = 0.02,
-                    numOfIterations = 10,
-                    tests = [
-                        ["RouletteSelection", "BasicReplacement"],
-                        ["RouletteSelection", "ElitismAndGenerational"],
-                        ["TournamentSelection", "BasicReplacement"],
-                        ["TournamentSelection", "ElitismAndGenerational"]
-                        ],
-                    )
+# ga.testCrossoverRate(defaultAlgData,
+#                     crossoverRate = 0.02,
+#                     numOfIterations = 10,
+#                     tests = [
+#                         ["RouletteSelection", "BasicReplacement"],
+#                         ["RouletteSelection", "ElitismAndGenerational"],
+#                         ["TournamentSelection", "BasicReplacement"],
+#                         ["TournamentSelection", "ElitismAndGenerational"]
+#                         ],
+#                     )
 
-ga.testPopulationSize(defaultAlgData,
-                      populationRate = 50,
-                      numOfIterations = 5,
-                      tests = [
-                          ["RouletteSelection", "BasicReplacement"],
-                          ["RouletteSelection", "ElitismAndGenerational"],
-                          ["TournamentSelection", "BasicReplacement"],
-                          ["TournamentSelection", "ElitismAndGenerational"]
-                          ],
-                      )
+# ga.testPopulationSize(defaultAlgData,
+#                       populationRate = 50,
+#                       numOfIterations = 5,
+#                       tests = [
+#                           ["RouletteSelection", "BasicReplacement"],
+#                           ["RouletteSelection", "ElitismAndGenerational"],
+#                           ["TournamentSelection", "BasicReplacement"],
+#                           ["TournamentSelection", "ElitismAndGenerational"]
+#                           ],
+#                       )
 
-ga.testNumGenerations(defaultAlgData,
-                      numGenerationsRate = 50,
-                      numOfIterations = 10,
-                      tests = [
-                          ["RouletteSelection", "BasicReplacement"],
-                          ["RouletteSelection", "ElitismAndGenerational"],
-                          ["TournamentSelection", "BasicReplacement"],["TournamentSelection", "ElitismAndGenerational"]
-                          ],
-                      )
+# ga.testNumGenerations(defaultAlgData,
+#                       numGenerationsRate = 50,
+#                       numOfIterations = 10,
+#                       tests = [
+#                           ["RouletteSelection", "BasicReplacement"],
+#                           ["RouletteSelection", "ElitismAndGenerational"],
+#                           ["TournamentSelection", "BasicReplacement"],["TournamentSelection", "ElitismAndGenerational"]
+#                           ],
+#                       )
 
+# More than 5 in third function takes too long
 ga.testNumGenerationsAndPopulationSize(defaultAlgData,
                                        populationSize = 50,
                                        numGenerations = 50,
-                                       numOfIterations = 15,
+                                       numOfIterations = 5,
                                         tests = [
                                             ["RouletteSelection", "BasicReplacement"],
                                             ["RouletteSelection", "ElitismAndGenerational"],

@@ -68,27 +68,27 @@ class GeneticAlgorithm:
     # Perform crossover on the parents to produce a child. In uniform crossover, each gene is chosen from either parent with equal probability. The crossoverRate parameter can be used to adjust this probability. If crossoverRate is high, genes from the first parent are more likely to be chosen, and if it's low, genes from the second parent are more likely to be chosen.
     def crossover(self, parents):
         child = []
-        if self.algData.verboseChanges: print(f"\nStarts crossover with Parent 0: {parents[0]}, Parent 1: {parents[1]}")
+        # if self.algData.verboseChanges: print(f"\nStarts crossover with Parent 0: {parents[0]}, Parent 1: {parents[1]}")
         for i in range(self.algData.numDimensions):
             if random.random() < self.algData.crossoverRate:
                 toAppend = parents[0][i]
-                if self.algData.verboseChanges: print("Appended from parent 0:", parents[0][i])
+                # if self.algData.verboseChanges: print("Appended from parent 0:", parents[0][i])
             else:
                 toAppend = parents[1][i]
-                if self.algData.verboseChanges: print("Appended from parent 1:", parents[0][i])
+                # if self.algData.verboseChanges: print("Appended from parent 1:", parents[0][i])
             child.append(toAppend)
-        if self.algData.verboseChanges: print("Child:", child)
+        # if self.algData.verboseChanges: print("Child:", child)
         return child
 
     # Perform mutation on the child
     def mutate(self, child):
-        if self.algData.verboseChanges: print(f"\nStarts mutation with Child: {child}")
+        # if self.algData.verboseChanges: print(f"\nStarts mutation with Child: {child}")
         for i in range(self.algData.numDimensions):
             if random.random() < self.algData.mutationRate:
                 # TODO: Change limits so each function has its own implementatio (and limits)
                 child[i] = random.uniform(-5.12, 5.12)
-                if self.algData.verboseChanges: print(f"Mutated at index {i} to {child[i]}")
-        if self.algData.verboseChanges: print("Mutated Child:", child)
+                # if self.algData.verboseChanges: print(f"Mutated at index {i} to {child[i]}")
+        # if self.algData.verboseChanges: print("Mutated Child:", child)
         return child
 
     # Evolve the population for a certain number of generations
@@ -272,6 +272,7 @@ class GeneticAlgorithm:
         self.plotTests(results, "Num Generations Growth")
 
     def testNumGenerationsAndPopulationSize(self, algData: None | AlgData = None, numGenerations = 50, populationSize = 50, numOfIterations = 10, tests = [["RouletteSelection", "BasicReplacement"]]):
+        print("STARTS THIS THING")
         if algData is not None:
             self.algData = algData
 
@@ -281,7 +282,7 @@ class GeneticAlgorithm:
             self.algData.selectionMethod = selectionMethod
             self.algData.evolveMethod = evolveMethod
 
-            if self.algData.verboseChanges: print(f"\nCHANGES NUMBER OF GENERATIONS AND POPULATION SIZE {selectionMethod}, {evolveMethod}")
+            print(f"\nCHANGES NUMBER OF GENERATIONS AND POPULATION SIZE {selectionMethod}, {evolveMethod}")
             results[0].append(self.getLoopedResults(numOfIterations, ["numGenerations", "populationSize"], [numGenerations, populationSize]))
             results[1].append(f"Select: {selectionMethod}, Evolve: {evolveMethod}")
         
