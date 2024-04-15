@@ -23,7 +23,7 @@ class GeneticAlgorithm:
     def evaluatePopulation(self):
         fitnessScores = []
         for individual in self.population:
-            fitnessScores.append(self.functionToOptimize(individual))
+            fitnessScores.append(FUNCTIONS[self.functionToOptimize](individual))
         return fitnessScores
 
     # Select parents from the population using fitness proportionate selection
@@ -43,7 +43,7 @@ class GeneticAlgorithm:
             case "TournamentSelection":
                 for _ in range(2):  # Select two parents
                     tournament = random.sample(self.population, self.algData.tournamentSize)
-                    best = min(tournament, key=lambda individual: self.functionToOptimize(individual))
+                    best = min(tournament, key=lambda individual: FUNCTIONS[self.functionToOptimize](individual))
                     parents.append(best)
         return parents
 
@@ -92,11 +92,11 @@ class GeneticAlgorithm:
                     bestFitnesses.append(min(fitnessScores))
                     worstFItnesses.append(max(fitnessScores))
                     avgFitnesses.append(sum(fitnessScores) / len(fitnessScores))
-                bestIndividual = min(self.population, key = lambda x: self.functionToOptimize(x))
+                bestIndividual = min(self.population, key = lambda x: FUNCTIONS[self.functionToOptimize](x))
             case "ElitismAndGenerational":
                 for _ in range(numGenerations):
                     fitnessScores = self.evaluatePopulation()
-                    newPopulation = sorted(self.population, key=lambda individual: self.functionToOptimize(individual))[:self.algData.elitismCount]
+                    newPopulation = sorted(self.population, key=lambda individual: FUNCTIONS[self.functionToOptimize](individual))[:self.algData.elitismCount]
                     
                     while len(newPopulation) < self.algData.populationSize:
                         parents = self.selectParents(fitnessScores)  # Ensure your selection method is compatible
@@ -106,13 +106,13 @@ class GeneticAlgorithm:
 
                     self.population = newPopulation
                     
-                    bestFitnesses.append(self.functionToOptimize(newPopulation[0]))  # Assuming the first individual is the best due to sorting
-                    worstFItnesses.append(self.functionToOptimize(newPopulation[-1]))  # Assuming the last individual is the worst due to sorting
+                    bestFitnesses.append(FUNCTIONS[self.functionToOptimize](newPopulation[0]))  # Assuming the first individual is the best due to sorting
+                    worstFItnesses.append(FUNCTIONS[self.functionToOptimize](newPopulation[-1]))  # Assuming the last individual is the worst due to sorting
                     avgFitnesses.append(sum(fitnessScores) / len(fitnessScores))
                 bestIndividual = self.population[0]  # The best individual
         return bestIndividual, bestFitnesses, worstFItnesses, avgFitnesses
 
-    def plot(bestFitnesses, worstFitnesses, avgFitnesses, showPlots = False):
+    def plot(self, bestFitnesses, worstFitnesses, avgFitnesses, showPlots = False):
         plt.figure(figsize=(12, 6))
         plt.plot(bestFitnesses, label='Best Fitness')
         plt.plot(worstFitnesses, label='Worst Fitness')
@@ -125,7 +125,7 @@ class GeneticAlgorithm:
         plt.clf()
         plt.close()
 
-    def plotTests(testsResults, xLabel, showTestsPlots = False):
+    def plotTests(self, testsResults, xLabel, showTestsPlots = False):
         plt.figure(figsize=(12, 6))
         plt.plot(testsResults)
         plt.title(f"Fitness through the change in {xLabel}")
@@ -151,21 +151,23 @@ class GeneticAlgorithm:
         fitnessScore = FUNCTIONS[FunctionToOptimize.SPHERE](bestSolution)
         # fitnessScore = round(fitnessScore, 5)
         print(f"Best solution: {bestSolution}, Fitness score:", {fitnessScore})
-        self.plot(bestFitnesses, worstFitnesses, avgFitnesses, showPlots = self.algData.showPlots)
+        self.plot(bestFitnesses, worstFitnesses, avgFitnesses, self.algData.showComplexPlot)
 
+        return bestSolution, fitnessScore
     
-    def testMutationRate(self, algData: None | AlgData = None):
+    def testMutationRate(self, algData: None | AlgData = None, numOfIterations = 5):
         if algData is not None:
             self.algData = algData
         originalMutationRate = self.algData.mutationRate
         self.algData.mutationRate = 0.01
         print("\nCHANGES MUTATION RATE")
         mutationResults = []
-        for _ in range(5):
+        for _ in range(numOfIterations):
+            print("Mutation rate:", self.algData.mutationRate)
             bestSolution, fitnessScore = self.test(self.algData)
             mutationResults.append(fitnessScore)
             self.algData.mutationRate += 0.01
         
         # Resets the mutation rate
         self.algData.mutationRate = originalMutationRate
-        self.plotTests(mutationResults, "Mutation Rate")
+        self.plotTests(mutationResults, "Mutation Rate", self.algData.showPlots)

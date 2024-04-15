@@ -27,7 +27,7 @@ from GeneticAlgorithm import GeneticAlgorithm
 
 # Select the function to optimize, from the following options:
 selectedFunction = FunctionToOptimize.SPHERE
-selectedFunction = FunctionToOptimize.EGG
+# selectedFunction = FunctionToOptimize.EGG
 
 
 ga = GeneticAlgorithm(functionToOptimize = selectedFunction)
@@ -46,64 +46,65 @@ favoursBestParents = algData(
     elitismCount = 2,
 
     verboseChanges = False,
-    showPlots = False,
-    showTestsPlots = True,
+    showComplexPlot = False,
+    showPlots = True,
     )
 
 # Using default alg data
 
-ga.test(defaultAlgData)
+# ga.test(defaultAlgData)
+ga.testMutationRate(defaultAlgData, numOfIterations = 30)
 
-# def testCrossoverRate():
-#     crossoverRate = 0.02
-#     print("\nCHANGES CROSSOVER RATE")
-#     crossoverResults = []
-#     for _ in range(5):
-#         bestSolution, fitnessScore = testing(numDimensions = numDimensions, crossoverRate = crossoverRate)
-#         crossoverResults.append(fitnessScore)
-#         crossoverRate += 0.02
-#     return crossoverResults
+def testCrossoverRate():
+    crossoverRate = 0.02
+    print("\nCHANGES CROSSOVER RATE")
+    crossoverResults = []
+    for _ in range(5):
+        bestSolution, fitnessScore = testing(numDimensions = numDimensions, crossoverRate = crossoverRate)
+        crossoverResults.append(fitnessScore)
+        crossoverRate += 0.02
+    return crossoverResults
 
-# def testPopulationSize():
-#     populationSize = 50
-#     print("\nCHANGES POPULATION SIZE")
-#     populationSizeResults = []
-#     for _ in range(5):
-#         bestSolution, fitnessScore = testing(populationSize = populationSize, numDimensions = numDimensions)
-#         populationSizeResults.append(fitnessScore)
-#         populationSize += 50
-#     return populationSizeResults
+def testPopulationSize():
+    populationSize = 50
+    print("\nCHANGES POPULATION SIZE")
+    populationSizeResults = []
+    for _ in range(5):
+        bestSolution, fitnessScore = testing(populationSize = populationSize, numDimensions = numDimensions)
+        populationSizeResults.append(fitnessScore)
+        populationSize += 50
+    return populationSizeResults
 
-# def testNumGenerations(numGenerations = 50):
-#     print("\nCHANGES NUMBER OF GENERATIONS")
-#     numGenerationsResults = []
-#     for _ in range(10):
-#         bestSolution, fitnessScore = testing(numGenerations = numGenerations, numDimensions = numDimensions)
-#         numGenerationsResults.append(fitnessScore)
-#         numGenerations += 50
-#     return numGenerationsResults
+def testNumGenerations(numGenerations = 50):
+    print("\nCHANGES NUMBER OF GENERATIONS")
+    numGenerationsResults = []
+    for _ in range(10):
+        bestSolution, fitnessScore = testing(numGenerations = numGenerations, numDimensions = numDimensions)
+        numGenerationsResults.append(fitnessScore)
+        numGenerations += 50
+    return numGenerationsResults
 
-# def testNumGenerationsAndPopulationSize(numGenerations = 50, populationSize = 50):
-#     print("\nCHANGES NUMBER OF GENERATIONS AND POPULATION SIZE")
-#     numGenerationsAndPopulationSizeResults = []
-#     for _ in range(10):
-#         bestSolution, fitnessScore = testing(numGenerations = numGenerations, numDimensions = numDimensions)
-#         numGenerationsAndPopulationSizeResults.append(fitnessScore)
-#         numGenerations += 50
-#         populationSize += 50
-#     return numGenerationsAndPopulationSizeResults
+def testNumGenerationsAndPopulationSize(numGenerations = 50, populationSize = 50):
+    print("\nCHANGES NUMBER OF GENERATIONS AND POPULATION SIZE")
+    numGenerationsAndPopulationSizeResults = []
+    for _ in range(10):
+        bestSolution, fitnessScore = testing(numGenerations = numGenerations, numDimensions = numDimensions)
+        numGenerationsAndPopulationSizeResults.append(fitnessScore)
+        numGenerations += 50
+        populationSize += 50
+    return numGenerationsAndPopulationSizeResults
 
-# mutationResults = testMutationRate()
-# plotTests(mutationResults, "Mutation Rate")
+mutationResults = testMutationRate()
+plotTests(mutationResults, "Mutation Rate")
 
-# crossoverResults = testCrossoverRate()
-# plotTests(crossoverResults, "Crossover Rate")
+crossoverResults = testCrossoverRate()
+plotTests(crossoverResults, "Crossover Rate")
 
-# populationSizeResults = testPopulationSize()
-# plotTests(populationSizeResults, "Population Size")
+populationSizeResults = testPopulationSize()
+plotTests(populationSizeResults, "Population Size")
 
-# numGenerationsResults = testNumGenerations()
-# plotTests(numGenerationsResults, "Number of Generations")
+numGenerationsResults = testNumGenerations()
+plotTests(numGenerationsResults, "Number of Generations")
 
-# numGenerationsAndPopulationSizeResults = testNumGenerationsAndPopulationSize()
-# plotTests(numGenerationsAndPopulationSizeResults, "Number of Generations and Population Size")
+numGenerationsAndPopulationSizeResults = testNumGenerationsAndPopulationSize()
+plotTests(numGenerationsAndPopulationSizeResults, "Number of Generations and Population Size")

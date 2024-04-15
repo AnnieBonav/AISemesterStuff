@@ -13,8 +13,8 @@ class AlgData:
                  evolveMethod = "BasicReplacement", 
                  elitismCount = 2,
                  verboseChanges = False,
-                 showPlots = False,
-                 showTestsPlots = True
+                 showComplexPlot = False,
+                 showPlots = True,
                  ):
         self.numDimensions = numDimensions
         self.populationSize = populationSize
@@ -28,5 +28,5 @@ class AlgData:
         self.elitismCount = elitismCount
 
         self.verboseChanges = verboseChanges
+        self.showComplexPlot = showComplexPlot
         self.showPlots = showPlots
-        self.showTestsPlots = showTestsPlots
