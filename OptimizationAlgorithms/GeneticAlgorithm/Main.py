@@ -23,131 +23,87 @@ from GeneticAlgorithm import GeneticAlgorithm
 # BASIC REPLACEMENT: The basic replacement method is a generational replacement method where the entire population is replaced by the offspring at each generation.
 # ELITISM AND GENERATIONAL : Elitisim is a method where the best individuals from the current population are carried over to the next generation. This ensures that the best individuals are not lost.,
 
-data = algData(
-    numDimensions = 10,
-    populationSize = 100,
-    mutationRate = 95,
-    crossoverRate = 95,
-    tournamentSize = 5,
-    elitismCount = 2,
 
-    selectionMethod = "TournamentSelection",
-    evolveMethod = "ElitismAndGenerational", 
-
-    verboseChanges = False,
-    showPlots = False,
-    showTestsPlots = True,
-    )
 
 # Select the function to optimize, from the following options:
 selectedFunction = FunctionToOptimize.SPHERE
 selectedFunction = FunctionToOptimize.EGG
 
 
-# TODO: Change to be part of the class
-def testing(populationSize = 100, numDimensions = 2, mutationRate = 0.01, crossoverRate = 0.8, numGenerations = 100):
-    ga = GeneticAlgorithm(
-        functionToOptimize = selectedFunction,
-        populationSize= populationSize,
-        numDimensions = numDimensions,
-        mutationRate = mutationRate,
-        crossoverRate = crossoverRate)
-    
-    bestSolution, bestFitnesses, worstFitnesses, avgFitnesses = ga.evolve(numGenerations)
+ga = GeneticAlgorithm(functionToOptimize = selectedFunction)
+defaultAlgData = algData()
 
-    bestSolution = [round(x, 5) for x in bestSolution]
-    bestFitnesses = [round(x, 5) for x in bestFitnesses]
-    worstFitnesses = [round(x, 5) for x in worstFitnesses]
-    avgFitnesses = [round(x, 5) for x in avgFitnesses]
+favoursBestParents = algData(
+    numDimensions = 3,
+    populationSize = 100,
+    numGenerations = 100,
+    mutationRate = 0.01,
+    crossoverRate = 0.95,
 
-    if printAllChanges: print(f"\nRESULTS")
-    fitnessScore = round(selectedFunction(bestSolution), 5)
-    print(f"Best solution: {bestSolution}, Fitness score:", {fitnessScore})
+    selectionMethod = "TournamentSelection",
+    tournamentSize = 5,
+    evolveMethod = "ElitismAndGenerational", 
+    elitismCount = 2,
 
-    # Plotting
-    plt.figure(figsize=(12, 6))
-    plt.plot(bestFitnesses, label='Best Fitness')
-    plt.plot(worstFitnesses, label='Worst Fitness')
-    plt.plot(avgFitnesses, label='Average Fitness')
-    plt.legend()
-    plt.title('Fitness through the Generations')
-    plt.xlabel('Generations')
-    plt.ylabel('Fitness')
-    if showPlots: plt.show()
-    plt.clf()
-    plt.close()
-    return bestSolution, fitnessScore
+    verboseChanges = False,
+    showPlots = False,
+    showTestsPlots = True,
+    )
 
-def plotTests(testsResults, xLabel):
-    plt.figure(figsize=(12, 6))
-    plt.plot(testsResults)
-    plt.title(f"Fitness through the change in {xLabel}")
-    plt.xlabel(f"{xLabel}")
-    plt.ylabel('Fitness')
-    if showTestsPlots: plt.show()
-    plt.clf()
-    plt.close()
+# Using default alg data
 
-def testMutationRate():
-    mutationRate = 0.01
-    print("\nCHANGES MUTATION RATE")
-    mutationResults = []
-    for _ in range(5):
-        bestSolution, fitnessScore = testing(numDimensions = numDimensions, mutationRate = mutationRate)
-        mutationResults.append(fitnessScore)
-        mutationRate += 0.01
-    return mutationResults
+ga.test(defaultAlgData)
 
-def testCrossoverRate():
-    crossoverRate = 0.02
-    print("\nCHANGES CROSSOVER RATE")
-    crossoverResults = []
-    for _ in range(5):
-        bestSolution, fitnessScore = testing(numDimensions = numDimensions, crossoverRate = crossoverRate)
-        crossoverResults.append(fitnessScore)
-        crossoverRate += 0.02
-    return crossoverResults
+# def testCrossoverRate():
+#     crossoverRate = 0.02
+#     print("\nCHANGES CROSSOVER RATE")
+#     crossoverResults = []
+#     for _ in range(5):
+#         bestSolution, fitnessScore = testing(numDimensions = numDimensions, crossoverRate = crossoverRate)
+#         crossoverResults.append(fitnessScore)
+#         crossoverRate += 0.02
+#     return crossoverResults
 
-def testPopulationSize():
-    populationSize = 50
-    print("\nCHANGES POPULATION SIZE")
-    populationSizeResults = []
-    for _ in range(5):
-        bestSolution, fitnessScore = testing(populationSize = populationSize, numDimensions = numDimensions)
-        populationSizeResults.append(fitnessScore)
-        populationSize += 50
-    return populationSizeResults
+# def testPopulationSize():
+#     populationSize = 50
+#     print("\nCHANGES POPULATION SIZE")
+#     populationSizeResults = []
+#     for _ in range(5):
+#         bestSolution, fitnessScore = testing(populationSize = populationSize, numDimensions = numDimensions)
+#         populationSizeResults.append(fitnessScore)
+#         populationSize += 50
+#     return populationSizeResults
 
-def testNumGenerations(numGenerations = 50):
-    print("\nCHANGES NUMBER OF GENERATIONS")
-    numGenerationsResults = []
-    for _ in range(10):
-        bestSolution, fitnessScore = testing(numGenerations = numGenerations, numDimensions = numDimensions)
-        numGenerationsResults.append(fitnessScore)
-        numGenerations += 50
-    return numGenerationsResults
+# def testNumGenerations(numGenerations = 50):
+#     print("\nCHANGES NUMBER OF GENERATIONS")
+#     numGenerationsResults = []
+#     for _ in range(10):
+#         bestSolution, fitnessScore = testing(numGenerations = numGenerations, numDimensions = numDimensions)
+#         numGenerationsResults.append(fitnessScore)
+#         numGenerations += 50
+#     return numGenerationsResults
 
-def testNumGenerationsAndPopulationSize(numGenerations = 50, populationSize = 50):
-    print("\nCHANGES NUMBER OF GENERATIONS AND POPULATION SIZE")
-    numGenerationsAndPopulationSizeResults = []
-    for _ in range(10):
-        bestSolution, fitnessScore = testing(numGenerations = numGenerations, numDimensions = numDimensions)
-        numGenerationsAndPopulationSizeResults.append(fitnessScore)
-        numGenerations += 50
-        populationSize += 50
-    return numGenerationsAndPopulationSizeResults
+# def testNumGenerationsAndPopulationSize(numGenerations = 50, populationSize = 50):
+#     print("\nCHANGES NUMBER OF GENERATIONS AND POPULATION SIZE")
+#     numGenerationsAndPopulationSizeResults = []
+#     for _ in range(10):
+#         bestSolution, fitnessScore = testing(numGenerations = numGenerations, numDimensions = numDimensions)
+#         numGenerationsAndPopulationSizeResults.append(fitnessScore)
+#         numGenerations += 50
+#         populationSize += 50
+#     return numGenerationsAndPopulationSizeResults
 
-mutationResults = testMutationRate()
-plotTests(mutationResults, "Mutation Rate")
+# mutationResults = testMutationRate()
+# plotTests(mutationResults, "Mutation Rate")
 
-crossoverResults = testCrossoverRate()
-plotTests(crossoverResults, "Crossover Rate")
+# crossoverResults = testCrossoverRate()
+# plotTests(crossoverResults, "Crossover Rate")
 
-populationSizeResults = testPopulationSize()
-plotTests(populationSizeResults, "Population Size")
+# populationSizeResults = testPopulationSize()
+# plotTests(populationSizeResults, "Population Size")
 
-numGenerationsResults = testNumGenerations()
-plotTests(numGenerationsResults, "Number of Generations")
+# numGenerationsResults = testNumGenerations()
+# plotTests(numGenerationsResults, "Number of Generations")
 
-numGenerationsAndPopulationSizeResults = testNumGenerationsAndPopulationSize()
-plotTests(numGenerationsAndPopulationSizeResults, "Number of Generations and Population Size")
+# numGenerationsAndPopulationSizeResults = testNumGenerationsAndPopulationSize()
+# plotTests(numGenerationsAndPopulationSizeResults, "Number of Generations and Population Size")

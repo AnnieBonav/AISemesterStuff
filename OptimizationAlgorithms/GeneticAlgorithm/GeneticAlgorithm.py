@@ -1,15 +1,15 @@
-import random, os, sys
+import random, os, sys, matplotlib.pyplot as plt
 parent_path = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 sys.path.append(parent_path)
 
-from OptimizationFunctions import FunctionToOptimize
+from OptimizationFunctions import FunctionToOptimize, FUNCTIONS
 from AlgData import AlgData
 
 # Define the GeneticAlgorithm class
 class GeneticAlgorithm:
     # Initialize the genetic algorithm with the population size, number of dimensions, mutation rate, and crossover rate
     def __init__(self, functionToOptimize:FunctionToOptimize):
-        self.algData = AlgData() # Default values, can be changed when calling testing
+        self.algData:AlgData = AlgData() # Default values, can be changed when calling testing
         self.functionToOptimize = functionToOptimize
         self.population = []
 
@@ -112,9 +112,60 @@ class GeneticAlgorithm:
                 bestIndividual = self.population[0]  # The best individual
         return bestIndividual, bestFitnesses, worstFItnesses, avgFitnesses
 
+    def plot(bestFitnesses, worstFitnesses, avgFitnesses, showPlots = False):
+        plt.figure(figsize=(12, 6))
+        plt.plot(bestFitnesses, label='Best Fitness')
+        plt.plot(worstFitnesses, label='Worst Fitness')
+        plt.plot(avgFitnesses, label='Average Fitness')
+        plt.legend()
+        plt.title('Fitness through the Generations')
+        plt.xlabel('Generations')
+        plt.ylabel('Fitness')
+        if showPlots: plt.show()
+        plt.clf()
+        plt.close()
+
+    def plotTests(testsResults, xLabel, showTestsPlots = False):
+        plt.figure(figsize=(12, 6))
+        plt.plot(testsResults)
+        plt.title(f"Fitness through the change in {xLabel}")
+        plt.xlabel(f"{xLabel}")
+        plt.ylabel('Fitness')
+        if showTestsPlots: plt.show()
+        plt.clf()
+        plt.close()
+
     # Can sent a new algData (to not use the default values)
-    def test(self, algData = None | AlgData):
+    def test(self, algData: None | AlgData = None):
         if algData is not None:
             self.algData = algData
         
-        pass
+        bestSolution, bestFitnesses, worstFitnesses, avgFitnesses = self.evolve(self.algData.numGenerations)
+
+        bestSolution = [round(x, 5) for x in bestSolution]
+        bestFitnesses = [round(x, 5) for x in bestFitnesses]
+        worstFitnesses = [round(x, 5) for x in worstFitnesses]
+        avgFitnesses = [round(x, 5) for x in avgFitnesses]
+
+        if self.algData.verboseChanges: print(f"\nRESULTS")
+        fitnessScore = FUNCTIONS[FunctionToOptimize.SPHERE](bestSolution)
+        # fitnessScore = round(fitnessScore, 5)
+        print(f"Best solution: {bestSolution}, Fitness score:", {fitnessScore})
+        self.plot(bestFitnesses, worstFitnesses, avgFitnesses, showPlots = self.algData.showPlots)
+
+    
+    def testMutationRate(self, algData: None | AlgData = None):
+        if algData is not None:
+            self.algData = algData
+        originalMutationRate = self.algData.mutationRate
+        self.algData.mutationRate = 0.01
+        print("\nCHANGES MUTATION RATE")
+        mutationResults = []
+        for _ in range(5):
+            bestSolution, fitnessScore = self.test(self.algData)
+            mutationResults.append(fitnessScore)
+            self.algData.mutationRate += 0.01
+        
+        # Resets the mutation rate
+        self.algData.mutationRate = originalMutationRate
+        self.plotTests(mutationResults, "Mutation Rate")

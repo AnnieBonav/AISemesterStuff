@@ -17,4 +17,5 @@ FUNCTIONS = {
     FunctionToOptimize.EGG: eggHolderFunction
 }
 
+# CALLING THE FUNCTIONS
 # result = FUNCTIONS[FunctionToOptimize.SPHERE](individual)
