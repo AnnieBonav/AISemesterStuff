@@ -1,9 +1,9 @@
-import random, matplotlib.pyplot as plt, math, sys, os
+import sys, os
+from AlgData import AlgData as algData
 parent_path = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 sys.path.append(parent_path)
 
 from OptimizationFunctions import FUNCTIONS, FunctionToOptimize
-from AlgData import AlgData as algData
 from GeneticAlgorithm import GeneticAlgorithm
 
 # The goal of the genetic algorithm is to find the input to this function that produces the lowest output
@@ -53,15 +53,17 @@ favoursBestParents = algData(
 # Using default alg data
 
 # ga.test(defaultAlgData)
+# Tournament Selection and Elitism and Generational combo work the best when testing the mutation rate because Elitism And Generational makes sure to keep the best individuals and Tournament Selection makes sure to select the best parents
 ga.testMutationRate(defaultAlgData,
                     mutationRate = 0.01,
-                    numOfIterations = 5
+                    numOfIterations = 10,
+                    tests = [["RouletteSelection", "BasicReplacement"],["TournamentSelection", "BasicReplacement"], ["RouletteSelection", "ElitismAndGenerational"], ["TournamentSelection", "ElitismAndGenerational"]],
                     )
 
-ga.testCrossoverRate(defaultAlgData,
-                    crossoverRate = 0.02,
-                    numOfIterations = 10
-                    )
+# ga.testCrossoverRate(defaultAlgData,
+#                     crossoverRate = 0.02,
+#                     numOfIterations = 10
+#                     )
 
 # ga.testPopulationSize(defaultAlgData,
 #                       populationRate = 50,
@@ -76,5 +78,5 @@ ga.testCrossoverRate(defaultAlgData,
 # ga.testNumGenerationsAndPopulationSize(defaultAlgData,
 #                                        populationSize = 50,
 #                                        numGenerations = 50,
-#                                        numOfIterations = 50
+#                                        numOfIterations = 25
 #                                        )

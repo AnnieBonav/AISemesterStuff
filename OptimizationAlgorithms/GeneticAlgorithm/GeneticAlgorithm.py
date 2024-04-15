@@ -1,9 +1,8 @@
 import random, os, sys, matplotlib.pyplot as plt
+from AlgData import AlgData
 parent_path = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 sys.path.append(parent_path)
-
 from OptimizationFunctions import FunctionToOptimize, FUNCTIONS
-from AlgData import AlgData
 import numpy as np
 
 # Define the GeneticAlgorithm class
@@ -16,9 +15,13 @@ class GeneticAlgorithm:
 
     # Initialize the population with random individuals
     def initializePopulation(self):
-        # We use a range of -5.12 to 5.12 for each dimension as it is a conventional range for the sphere function
-        # TODO: Change to be by class implementation
-        self.population = [[random.uniform(-5.12, 5.12) for _ in range(self.algData.numDimensions)] for _ in range(self.algData.populationSize)]
+        # We use a range of -5.12 to 5.12 for each dimension as it is a conventional range for the sphere function, and -512 to 512 for the egg function
+        match self.functionToOptimize:
+            case FunctionToOptimize.SPHERE:
+                self.population = [[random.uniform(-5.12, 5.12) for _ in range(self.algData.numDimensions)] for _ in range(self.algData.populationSize)]
+            case FunctionToOptimize.EGG:
+                # Set the num of dimensions to 2
+                self.population = [[random.uniform(-512, 512) for _ in range(2)] for _ in range(self.algData.populationSize)]
 
     # Evaluate the fitness of each individual in the population using the sphere function
     def evaluatePopulation(self):
@@ -46,6 +49,8 @@ class GeneticAlgorithm:
                     tournament = random.sample(self.population, self.algData.tournamentSize)
                     best = min(tournament, key=lambda individual: FUNCTIONS[self.functionToOptimize](individual))
                     parents.append(best)
+            case default:
+                raise ValueError("Invalid selection method")
         return parents
 
     # Perform crossover on the parents to produce a child. In uniform crossover, each gene is chosen from either parent with equal probability. The crossoverRate parameter can be used to adjust this probability. If crossoverRate is high, genes from the first parent are more likely to be chosen, and if it's low, genes from the second parent are more likely to be chosen.
@@ -111,6 +116,9 @@ class GeneticAlgorithm:
                     worstFItnesses.append(FUNCTIONS[self.functionToOptimize](newPopulation[-1]))  # Assuming the last individual is the worst due to sorting
                     avgFitnesses.append(sum(fitnessScores) / len(fitnessScores))
                 bestIndividual = self.population[0]  # The best individual
+            
+            case default:
+                raise ValueError("Invalid evolve method")
         return bestIndividual, bestFitnesses, worstFItnesses, avgFitnesses
 
     def plot(self, bestFitnesses, worstFitnesses, avgFitnesses, showPlots = False):
@@ -126,16 +134,22 @@ class GeneticAlgorithm:
         plt.clf()
         plt.close()
 
-    def plotTests(self, testsResults, xLabel, showTestsPlots = False):
+    def plotTests(self, testsResults, testTitle, showTestsPlots = True):
         # Generate x values as whole numbers
-        x_values = np.arange(1, len(testsResults) + 1)
+        x_values = np.arange(1, len(testsResults[0][0]) + 1)
 
         plt.figure(figsize=(12, 6))
-        plt.plot(x_values, testsResults)
-        plt.title(f"Fitness through the change in {xLabel}")
-        plt.xlabel(f"{xLabel}")
+        
+        for testResult, label in zip(testsResults[0], testsResults[1]):
+            plt.plot(x_values, testResult, label=label)
+
+        plt.title(f"Fitness through the change in {testTitle}")
+        plt.xlabel(f"{testTitle}")
         plt.xticks(x_values)  # Set x-axis ticks to be the whole numbers
+        for x in x_values:
+            plt.axvline(x = x, linestyle='dotted', color='gray')
         plt.ylabel('Fitness')
+        plt.legend()
         if showTestsPlots: plt.show()
         plt.clf()
         plt.close()
@@ -164,23 +178,36 @@ class GeneticAlgorithm:
 
         return bestSolution, fitnessScore
     
-    def testMutationRate(self, algData: None | AlgData = None, mutationRate = 0.01, numOfIterations = 5):
+    def getLoopedResults(self, numOfIterations, parameters:list, increaseRates:list):
+        results = []
+        originalValues = self.algData.getParameters(parameters)
+        self.algData.setParameters(parameters, originalValues)
+
+        # Loop through the parameters, as multiple could be changed
+        for _ in range(numOfIterations):
+            print(f"Using parameters {parameters} with values {self.algData.getParameters(parameters)}")
+            bestSolution, fitnessScore = self.test(self.algData)
+            self.algData.increaseParameters(parameters, increaseRates)
+            results.append(fitnessScore)
+            
+        self.algData.setParameters(parameters, originalValues)
+        return results
+    
+    def testMutationRate(self, algData: None | AlgData = None, mutationRate = 0.01, numOfIterations = 5, tests = [["RouletteSelection", "BasicReplacement"]]):
         if algData is not None:
             self.algData = algData
-        originalMutationRate = self.algData.mutationRate
-        self.algData.mutationRate = mutationRate
 
-        print("\nCHANGES MUTATION RATE")
-        mutationResults = []
-        for _ in range(numOfIterations):
-            print("Mutation Rate:", self.algData.mutationRate)
-            bestSolution, fitnessScore = self.test(self.algData)
-            mutationResults.append(fitnessScore)
-            self.algData.mutationRate += mutationRate
+        # Values and Titles
+        results = [[],[]]
+        for selectionMethod, evolveMethod in tests:
+            self.algData.selectionMethod = selectionMethod
+            self.algData.evolveMethod = evolveMethod
+
+            print(f"\nCHANGES MUTATION RATE {selectionMethod}, {evolveMethod}")
+            results[0].append(self.getLoopedResults(numOfIterations, ["mutationRate"], [mutationRate]))
+            results[1].append(f"Select: {selectionMethod}, Evolve: {evolveMethod}")
         
-        # Resets the mutation rate
-        self.algData.mutationRate = originalMutationRate
-        self.plotTests(mutationResults, "Mutation Rate", self.algData.showPlots)
+        self.plotTests(results, "Mutation Rate")
 
     def testCrossoverRate(self, algData: None | AlgData = None, crossoverRate = 0.02, numOfIterations = 5):
         if algData is not None:
@@ -218,37 +245,23 @@ class GeneticAlgorithm:
     def testNumGenerations(self, algData: None | AlgData = None, numGenerationsRate = 50, numOfIterations = 10):
         if algData is not None:
             self.algData = algData
-        originalNumGenerations = self.algData.numGenerations
-        self.algData.numGenerations = numGenerationsRate
 
-        print("\nCHANGES NUMBER OF GENERATIONS")
-        numGenerationsResults = []
-        for _ in range(numOfIterations):
-            print("Number of Generations:", self.algData.numGenerations)
-            bestSolution, fitnessScore = self.test(self.algData)
-            numGenerationsResults.append(fitnessScore)
-            self.algData.numGenerations += numGenerationsRate
+        print("\nCHANGES NUMBER OF GENERATIONS ROULETTE, BASIC")
+        numGenerationsResults0 = self.getLoopedResults(numOfIterations, ["numGenerations"], [numGenerationsRate])
+        print("\nCHANGES NUMBER OF GENERATIONS TOURNAMENT, BASIC")
+        numGenerationsResults1 = self.getLoopedResults(numOfIterations, ["numGenerations"], [numGenerationsRate])
 
-        self.algData.numGenerations = originalNumGenerations
-        self.plotTests(numGenerationsResults, "Number of Generations Rate", self.algData.showPlots)
+        self.plotTests([numGenerationsResults0, numGenerationsResults1], "Number of Generations Rate", self.algData.showPlots)
 
     def testNumGenerationsAndPopulationSize(self, algData: None | AlgData = None, numGenerations = 50, populationSize = 50, numOfIterations = 10):
         if algData is not None:
             self.algData = algData
-        originalNumGenerations = self.algData.numGenerations
-        originalPopulationSize = self.algData.populationSize
-        self.algData.numGenerations = numGenerations
-        self.algData.populationSize = populationSize
 
-        print("\nCHANGES NUMBER OF GENERATIONS AND POPULATION SIZE")
-        numGenerationsAndPopulationSizeResults = []
-        for _ in range(numOfIterations):
-            print(f"Number of Generations: {self.algData.numGenerations}, Population Size: {self.algData.populationSize}")
-            bestSolution, fitnessScore = self.test(self.algData)
-            numGenerationsAndPopulationSizeResults.append(fitnessScore)
-            self.algData.numGenerations += numGenerations
-            self.algData.populationSize += populationSize
+        print("\nCHANGES NUMBER OF GENERATIONS AND POPULATION SIZE ROULETTE, BASIC")
+        numGenerationsAndPopulationSizeResults0 = self.getLoopedResults(numOfIterations, ["numGenerations", "numPopulationSize"], [numGenerations, populationSize])
+
+        print("\nCHANGES NUMBER OF GENERATIONS AND POPULATION SIZE TOURNAMENT, BASIC")
+        numGenerationsAndPopulationSizeResults1 = self.getLoopedResults(numOfIterations, ["numGenerations", "numPopulationSize"], [numGenerations, populationSize])
         
-        self.algData.numGenerations = originalNumGenerations
-        self.algData.populationSize = originalPopulationSize
-        self.plotTests(numGenerationsAndPopulationSizeResults, "Number of Generations and Population Size", self.algData.showPlots)
+        
+        self.plotTests([numGenerationsAndPopulationSizeResults0, numGenerationsAndPopulationSizeResults1], "Number of Generations and Population Size", self.algData.showPlots)
