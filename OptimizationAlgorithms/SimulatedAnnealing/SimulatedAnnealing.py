@@ -85,13 +85,13 @@ def baseline(temperature = 100, coolingRate = 0.95, numIterations = 1000):
     bestState = simulatedAnnealing(baselineSolution, temperature, coolingRate, numIterations)
     saveDataToCsv(path, [f"Baseline solution from: {baselineSolution}", f"Temperature: {temperature}", f"Cooling Rate: {coolingRate}", f"Number of iterations: {numIterations}", f"Best Solution: {bestState}"])
 
-def testing(temperature = 100, coolingRate = 0.95, numIterations = 1000, degree = 3):
+def testing(temperature = 100, coolingRate = 0.95, numIterations = 1000, degree = 2):
     initialState = [50, -30]
     
     bestState = simulatedAnnealing(initialState, temperature, coolingRate, numIterations)
     saveDataToCsv(path, [f"Testing solution from: {initialState}", f"Temperature: {temperature}", f"Cooling Rate: {coolingRate}", f"Number of iterations: {numIterations}", f"Best Solution: {bestState}"])
 
-def randomSolution(temperature = 100, coolingRate = 0.95, numIterations = 1000, space = 10, degree = 3):
+def randomSolution(temperature = 100, coolingRate = 0.95, numIterations = 1000, space = 10, degree = 2):
     initialTemperature = temperature
     initialState = []
     for _ in range(degree):
@@ -99,16 +99,15 @@ def randomSolution(temperature = 100, coolingRate = 0.95, numIterations = 1000, 
     bestState = simulatedAnnealing(initialState, temperature, coolingRate, numIterations)
     saveDataToCsv(path, [f"Random Solution from: {initialState}", f"Initial Temperature: {initialTemperature}", f"Cooling Rate: {coolingRate}", f"Number of Iterations: {numIterations}", f"Best Solution: {bestState}"])
 
-numIterations = 10
-if not onlyRunRandomOne:
-    # baseline()
-    for i in range(7):
-        testing(temperature = temperature, coolingRate = coolingRate, numIterations = numIterations, degree = degree)
-        numIterations *= 10
+# numIterations = 10
+# if not onlyRunRandomOne:
+#     # baseline()
+#     for i in range(numIterations):
+#         testing(temperature = temperature, coolingRate = coolingRate, numIterations = numIterations, degree = degree)
+#         numIterations *= 10
 
 numIterations = 10
-# space = 100
 space = 100
-for i in range(5):
+for i in range(numIterations):
     randomSolution(numIterations = numIterations, space = space, coolingRate = coolingRate, degree = degree)
     numIterations *= 10
