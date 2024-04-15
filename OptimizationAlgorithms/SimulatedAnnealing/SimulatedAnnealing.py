@@ -1,5 +1,5 @@
 import math, random
-from HelperFunctions import saveDataToCsv
+from OptimizationAlgorithms.HelperFunctions import saveDataToCsv
 import matplotlib.pyplot as plt
 import time
 

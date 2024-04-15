@@ -1,9 +1,9 @@
 import math, random
-from HelperFunctions import saveDataToCsv
+from OptimizationAlgorithms.HelperFunctions import saveDataToCsv
 import matplotlib.pyplot as plt
 import time
 import matplotlib.pyplot as plt
-from HelperFunctions import visualization
+from OptimizationAlgorithms.HelperFunctions import visualization
 
 path = "SphereFunction/SimulatedAnnealing.csv"
 

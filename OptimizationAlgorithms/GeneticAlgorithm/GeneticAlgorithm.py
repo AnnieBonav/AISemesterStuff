@@ -1,5 +1,5 @@
 import random, matplotlib.pyplot as plt, math
-import OptimizationFunctions as optFunc
+import OptimizationAlgorithms.OptimizationFunctions as optFunc
 
 # The goal of the genetic algorithm is to find the input to this function that produces the lowest output
 
