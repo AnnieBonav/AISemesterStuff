@@ -26,12 +26,13 @@ from GeneticAlgorithm import GeneticAlgorithm
 
 
 # Select the function to optimize, from the following options:
-selectedFunction = FunctionToOptimize.SPHERE
+# selectedFunction = FunctionToOptimize.SPHERE
 # selectedFunction = FunctionToOptimize.EGG
+selectedFunction = FunctionToOptimize.SHAFFER2
 
 
 ga = GeneticAlgorithm(functionToOptimize = selectedFunction)
-defaultAlgData = algData()
+defaultAlgData = algData(numDimensions=2)
 
 favoursBestParents = algData(
     numDimensions = 3,
@@ -57,26 +58,54 @@ favoursBestParents = algData(
 ga.testMutationRate(defaultAlgData,
                     mutationRate = 0.01,
                     numOfIterations = 10,
-                    tests = [["RouletteSelection", "BasicReplacement"],["TournamentSelection", "BasicReplacement"], ["RouletteSelection", "ElitismAndGenerational"], ["TournamentSelection", "ElitismAndGenerational"]],
+                    tests = [
+                        ["RouletteSelection", "BasicReplacement"],
+                        ["RouletteSelection", "ElitismAndGenerational"],
+                        ["TournamentSelection", "BasicReplacement"],
+                        ["TournamentSelection", "ElitismAndGenerational"]
+                        ],
                     )
 
-# ga.testCrossoverRate(defaultAlgData,
-#                     crossoverRate = 0.02,
-#                     numOfIterations = 10
-#                     )
+ga.testCrossoverRate(defaultAlgData,
+                    crossoverRate = 0.02,
+                    numOfIterations = 10,
+                    tests = [
+                        ["RouletteSelection", "BasicReplacement"],
+                        ["RouletteSelection", "ElitismAndGenerational"],
+                        ["TournamentSelection", "BasicReplacement"],
+                        ["TournamentSelection", "ElitismAndGenerational"]
+                        ],
+                    )
 
-# ga.testPopulationSize(defaultAlgData,
-#                       populationRate = 50,
-#                       numOfIterations = 20
-#                       )
+ga.testPopulationSize(defaultAlgData,
+                      populationRate = 50,
+                      numOfIterations = 5,
+                      tests = [
+                          ["RouletteSelection", "BasicReplacement"],
+                          ["RouletteSelection", "ElitismAndGenerational"],
+                          ["TournamentSelection", "BasicReplacement"],
+                          ["TournamentSelection", "ElitismAndGenerational"]
+                          ],
+                      )
 
-# ga.testNumGenerations(defaultAlgData,
-#                       numGenerationsRate = 50,
-#                       numOfIterations = 30
-#                       )
+ga.testNumGenerations(defaultAlgData,
+                      numGenerationsRate = 50,
+                      numOfIterations = 10,
+                      tests = [
+                          ["RouletteSelection", "BasicReplacement"],
+                          ["RouletteSelection", "ElitismAndGenerational"],
+                          ["TournamentSelection", "BasicReplacement"],["TournamentSelection", "ElitismAndGenerational"]
+                          ],
+                      )
 
-# ga.testNumGenerationsAndPopulationSize(defaultAlgData,
-#                                        populationSize = 50,
-#                                        numGenerations = 50,
-#                                        numOfIterations = 25
-#                                        )
+ga.testNumGenerationsAndPopulationSize(defaultAlgData,
+                                       populationSize = 50,
+                                       numGenerations = 50,
+                                       numOfIterations = 15,
+                                        tests = [
+                                            ["RouletteSelection", "BasicReplacement"],
+                                            ["RouletteSelection", "ElitismAndGenerational"],
+                                            ["TournamentSelection", "BasicReplacement"],
+                                            ["TournamentSelection","ElitismAndGenerational"]
+                                            ],
+                                       )
