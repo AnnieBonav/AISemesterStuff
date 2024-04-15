@@ -5,13 +5,15 @@ parent_path = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 sys.path.append(parent_path)
 from HelperFunctions import visualization, saveDataToCsv
 
-# def selectedFunction(x):
+# def eggFunction(x):
 #     assert len(x) >= 2, "Egg Holder function requires at least two variables"
 #     return -(x[1] + 47) * math.sin(math.sqrt(abs(x[0]/2 + (x[1]  + 47)))) - x[0] * math.sin(math.sqrt(abs(x[0] - (x[1]  + 47))))
+# space = 512
 
 def shafferFunction(x):
     assert len(x) >= 2, "Shaffer function requires at least two variables"
     return 0.5 + (math.sin(math.sqrt(x[0]**2 + x[1]**2))**2 - 0.5) / (1 + 0.001 * (x[0]**2 + x[1]**2))**2
+space = 100
 
 selectedFunction = shafferFunction
 
@@ -25,10 +27,7 @@ coolingRate = 0.95
 
 # The temperature is the initial temperature of the system, the higher the temperature, the more likely the algorithm is to accept worse solutions
 temperature = 95
-
 numIterations = 5
-
-space = 100
 
 #Change to show all or only best on visualization
 onlyBetter = True
@@ -80,6 +79,8 @@ def simulatedAnnealing(initialState, temperature, coolingRate, numIterations, se
     
     if(not onlyBetter):
         costs = allNumbersGraph
+    if(len(costs)<= 1):
+        return
     costs = np.array(costs)
     print("COSTS LENGTH", len(costs))
     # Plot the cost of the best solution in each iteration
