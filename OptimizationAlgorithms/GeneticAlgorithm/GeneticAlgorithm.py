@@ -85,8 +85,13 @@ class GeneticAlgorithm:
         # if self.algData.verboseChanges: print(f"\nStarts mutation with Child: {child}")
         for i in range(self.algData.numDimensions):
             if random.random() < self.algData.mutationRate:
-                # TODO: Change limits so each function has its own implementatio (and limits)
-                child[i] = random.uniform(-5.12, 5.12)
+                match(self.functionToOptimize):
+                    case FunctionToOptimize.SPHERE:
+                        child[i] = random.uniform(-5.12, 5.12)
+                    case FunctionToOptimize.EGG:
+                        child[i] = random.uniform(-512, 512)
+                    case FunctionToOptimize.SHAFFER2:
+                        child[i] = random.uniform(-100, 100)
                 # if self.algData.verboseChanges: print(f"Mutated at index {i} to {child[i]}")
         # if self.algData.verboseChanges: print("Mutated Child:", child)
         return child

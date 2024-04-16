@@ -29,7 +29,7 @@ coolingRate = 0.95
 temperature = 95
 numIterations = 5
 
-#Change to show all or only best on visualization
+# Change to show all or only best on visualization
 onlyBetter = True
 
 # The Simulated Annealing algorithm is a probabilistic technique used for finding an approximate solution to an optimization problem
