@@ -1,3 +1,5 @@
+import pandas as pd
+
 
 # This data is used to test the Naive Bayes algorithm
 # The first number in the list is the number of times the word appears in ham (not smap) emails, while the second number is the number of times the word appears in spam emails
@@ -11,30 +13,59 @@ hamSpamData = {
 
 verboseSingleProb = True
 
-def calculateNaiveBayes(wordsCounts, emailType):
-    totalHamEmails = sum(wordsCounts[word][0] for word in wordsCounts)
-    totalSpamEmails = sum(wordsCounts[word][1] for word in wordsCounts)
+hamProb = 250
+spamProb = 750
+
+def calculateNaiveBayes(wordsData, emailType):
+    totalHamEmails = sum(wordsData[word][0] for word in wordsData)
+    totalSpamEmails = sum(wordsData[word][1] for word in wordsData)
 
     print("Total number of ham emails: " + str(totalHamEmails))
     print("Total number of spam emails: " + str(totalSpamEmails))
 
-    uniqueWords = len(wordsCounts)
+    # cardinality = len(wordsData)
+    cardinality = 2
 
-    print("Getting the probability of the email being " + emailType)
+    print("\n\nGetting the probability of the email being " + emailType)
     # Probability is set to 1 as Naive Bayes assumes independence between the words
     probability = 1.0
-    wordsProbabilities = []
-    for word in wordsCounts:
-        if emailType == "spam":
-            wordProbability = (wordsCounts[word][1] + 1) / (totalSpamEmails + uniqueWords)
-        else:
-            wordProbability = (wordsCounts[word][0] + 1) / (totalHamEmails + uniqueWords)
-        if verboseSingleProb : print("Probability of word '" + word + "' in " + emailType + " emails: " + str(wordProbability))
-        wordsProbabilities.append(wordProbability)
-        probability *= wordProbability
+    wordsFalseProbabilities = []
+    wordsTrueProbabilities = []
+    for word in wordsData:
+        countHam = wordsData[word][0]
+        countSpam = wordsData[word][1]
+        print(f"\nWORD: {word}, Count Spam: {countSpam}, Count Ham: {countHam}")
+
+        if emailType == "ham": # False spam
+            wordProbabilityTrue = (1 + countHam) / (cardinality + hamProb)
+            wordProbabilityFalse = 1 - ((1 + countHam) / (cardinality + hamProb))
+        else: # True spam
+            wordProbabilityTrue = (1 + countSpam) / (cardinality + spamProb)
+            wordProbabilityFalse = 1 - ((1 + countSpam) / (cardinality + spamProb))
+        if verboseSingleProb : print(f"Probability of word '{word}' false in {emailType}emails: {str(wordProbabilityFalse)} and true: {str(wordProbabilityTrue)}")
+
+        wordsFalseProbabilities.append(round(wordProbabilityFalse, 3))
+        wordsTrueProbabilities.append(round(wordProbabilityTrue, 3))
+
+        probability *= wordProbabilityFalse
     
-    return probability
+    return probability, wordsFalseProbabilities, wordsTrueProbabilities
 
 # Test the Naive Bayes algorithm
-print(calculateNaiveBayes(hamSpamData, "spam"))
-print(calculateNaiveBayes(hamSpamData, "ham"))
+probsHam, falseProbsHam, trueProbsHam = calculateNaiveBayes(hamSpamData, "ham")
+probsSpam, falseProbsSpam, trueProbsSpam = calculateNaiveBayes(hamSpamData, "spam")
+
+
+# Create a dictionary with the results
+data = {
+    "falseProbsHam" : falseProbsHam,
+    "trueProbsHam" : trueProbsHam,
+    "falseProbsSpam" : falseProbsSpam,
+    "trueProbsSpam" : trueProbsSpam
+}
+
+# Create a pandas DataFrame
+df = pd.DataFrame(data)
+
+# Print the DataFrame
+print(df)
