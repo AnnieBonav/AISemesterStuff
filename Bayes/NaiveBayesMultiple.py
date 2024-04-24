@@ -17,8 +17,15 @@ hamProb = 250
 spamProb = 750
 
 def calculateIndividualProbabilities(wordsData, emailType):
+    totalHamEmails = sum(wordsData[word][0] for word in wordsData)
+    totalSpamEmails = sum(wordsData[word][1] for word in wordsData)
+
+    # cardinality = len(wordsData)
     cardinality = 2
 
+    print("\n\nGetting the probability of the email being " + emailType)
+    # Probability is set to 1 as Naive Bayes assumes independence between the words
+    probability = 1.0
     wordsFalseProbabilities = []
     wordsTrueProbabilities = []
     for word in wordsData:
@@ -32,24 +39,30 @@ def calculateIndividualProbabilities(wordsData, emailType):
         else: # True spam
             wordProbabilityTrue = (1 + countSpam) / (cardinality + spamProb)
             wordProbabilityFalse = 1 - ((1 + countSpam) / (cardinality + spamProb))
-
         if verboseSingleProb : print(f"Probability of word '{word}' false in {emailType}emails: {str(wordProbabilityFalse)} and true: {str(wordProbabilityTrue)}")
 
         wordsFalseProbabilities.append(round(wordProbabilityFalse, 3))
         wordsTrueProbabilities.append(round(wordProbabilityTrue, 3))
+
+        probability *= wordProbabilityFalse
     
-    return wordsFalseProbabilities, wordsTrueProbabilities
+    return probability, wordsFalseProbabilities, wordsTrueProbabilities
 
 # Test the Naive Bayes algorithm
-falseProbsHam, trueProbsHam = calculateIndividualProbabilities(hamSpamData, "ham")
-falseProbsSpam, trueProbsSpam = calculateIndividualProbabilities(hamSpamData, "spam")
+probsHam, falseProbsHam, trueProbsHam = calculateIndividualProbabilities(hamSpamData, "ham")
+probsSpam, falseProbsSpam, trueProbsSpam = calculateIndividualProbabilities(hamSpamData, "spam")
 
-probsData = {
+
+# Create a dictionary with the results
+data = {
     "falseProbsHam" : falseProbsHam,
     "trueProbsHam" : trueProbsHam,
     "falseProbsSpam" : falseProbsSpam,
     "trueProbsSpam" : trueProbsSpam
 }
 
-df = pd.DataFrame(probsData)
+# Create a pandas DataFrame
+df = pd.DataFrame(data)
+
+# Print the DataFrame
 print(df)
