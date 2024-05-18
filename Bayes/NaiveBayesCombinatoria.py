@@ -1,7 +1,7 @@
 import pandas as pd
+import itertools
 
 # This data is used to test the Naive Bayes algorithm
-# The first number in the list is the number of times the word appears in ham (not smap) emails, while the second number is the number of times the word appears in spam emails
 hamSpamData = {
     "fortune" : [0, 375],
     "next" : [125, 0],
@@ -11,18 +11,17 @@ hamSpamData = {
 }
 
 verboseSingleProb = True
-
 hamProb = 250
 spamProb = 750
 totalEmails = hamProb + spamProb
-
 verboseIndividualProbs = False
 
 def calculateNaiveBayes(wordsData, emailType):
     cardinality = len(wordsData)
+    hamCount = sum(count[0] for count in hamSpamData.values())
+    spamCount = sum(count[1] for count in hamSpamData.values())
 
     print("\n\nGetting the probability of the email being " + emailType)
-    # Probability is set to 1 as Naive Bayes assumes independence between the words
     probability = 1.0
 
     wordsProbabilities = []
@@ -31,17 +30,15 @@ def calculateNaiveBayes(wordsData, emailType):
         countSpam = wordsData[word][1]
         print(f"\nWORD: {word}, Count Spam: {countSpam}, Count Ham: {countHam}")
 
-        if emailType == "ham": # False spam
-            wordProbability = (1 + countHam) / (cardinality + hamProb)
-        elif emailType == "spam": # True spam
-            wordProbability = (1 + countSpam) / (cardinality + spamProb)
+        if emailType == "ham":
+            wordProbability = (1 + countHam) / (cardinality + hamCount)
+        elif emailType == "spam":
+            wordProbability = (1 + countSpam) / (cardinality + spamCount)
         if verboseSingleProb : print(f"Probability of word '{word}' in {emailType} emails: {str(wordProbability)}")
 
         wordsProbabilities.append(round(wordProbability, 3))
-
         probability *= wordProbability
 
-    # Apply the prior only once per classification, outside the loop
     if emailType == "ham":
         prior = hamProb / totalEmails
     elif emailType == "spam":
@@ -50,6 +47,23 @@ def calculateNaiveBayes(wordsData, emailType):
     probability *= prior
 
     return probability, wordsProbabilities
+
+# Generate all possible combinations of words
+words = list(hamSpamData.keys())
+combinations = list(itertools.chain(*[itertools.combinations(words, i) for i in range(1, len(words) + 1)]))
+
+# Initialize a DataFrame to store the probabilities
+df = pd.DataFrame(columns=['index', '(Spam, 0)', '(Spam, 1)'])
+
+for i, combination in enumerate(combinations):
+    # Calculate the probabilities for each combination
+    probHam, _ = calculateNaiveBayes({word: hamSpamData[word] for word in combination}, "ham")
+    probSpam, _ = calculateNaiveBayes({word: hamSpamData[word] for word in combination}, "spam")
+
+    # Add the probabilities to the DataFrame
+    df = df._append({'index': combination, '(Spam, 0)': probHam, '(Spam, 1)': probSpam}, ignore_index=True)
+
+print(df)
 
 # Test the Naive Bayes algorithm
 probHam, wordsProbsHam = calculateNaiveBayes(hamSpamData, "ham")
