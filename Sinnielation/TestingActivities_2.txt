@@ -1,0 +1,194 @@
+
+Perry after creating
+Perry T0 - Hunger: 0, Tiredness: 0, Bladder: 0, Detectiveness: 0, Relaxation: 0
+
+Perry after 10 minutes (increased through the day)
+Perry T10 - Hunger: 4.17, Tiredness: 1.04, Bladder: 5.56, Detectiveness: 1.61, Relaxation: 2.08
+
+Perry after 10 minutes (increased through the day)
+Perry T20 - Hunger: 8.34, Tiredness: 2.08, Bladder: 11.12, Detectiveness: 3.22, Relaxation: 4.16
+
+Perry choosing its first activity
+HungerLevel: the y value for x = 8.34 (with index 83) is 0.003493582034759708
+TirednessLevel: the y value for x = 2.08 (with index 21) is 5.600671229482902e-18
+BladderLevel: the y value for x = 11.12 (with index 111) is 9.251707984300384e-05
+DetectiveNeed: the y value for x = 3.22 (with index 32) is 0.6755528141207996
+RelaxationNeed: the y value for x = 4.16 (with index 42) is 0.599292986680374
+
+Perry is in detective mode
+DetectiveNeed: 0
+{"name": "solve_crime", "value": 10, "time_in_min": 10}
+
+Perry after choosing #1 activity
+Perry T30 - Hunger: 12.51, Tiredness: 3.12, Bladder: 16.68, Detectiveness: 0, Relaxation: 6.24
+HungerLevel: the y value for x = 12.51 (with index 125) is 0.00589781231858761
+TirednessLevel: the y value for x = 3.12 (with index 31) is 1.0450549479423697e-17
+BladderLevel: the y value for x = 16.68 (with index 167) is 0.00019618451951872583
+DetectiveNeed: the y value for x = 0 (with index 0) is 0.8
+RelaxationNeed: the y value for x = 6.24 (with index 62) is 0.5984593201810419
+
+Perry is in detective mode
+DetectiveNeed: 0
+{"name": "solve_crime", "value": 10, "time_in_min": 10}
+
+Perry after choosing #2 activity
+Perry T40 - Hunger: 16.68, Tiredness: 4.16, Bladder: 22.24, Detectiveness: 0, Relaxation: 8.32
+HungerLevel: the y value for x = 16.68 (with index 167) is 0.008864482029551729
+TirednessLevel: the y value for x = 4.16 (with index 42) is 1.8584794105373895e-17
+BladderLevel: the y value for x = 22.24 (with index 222) is 0.00037355915324521885
+DetectiveNeed: the y value for x = 0 (with index 0) is 0.8
+RelaxationNeed: the y value for x = 8.32 (with index 83) is 0.5972388805221638
+
+Perry is in detective mode
+DetectiveNeed: 0
+{"name": "solve_crime", "value": 10, "time_in_min": 10}
+
+Perry after choosing #3 activity
+Perry T50 - Hunger: 20.85, Tiredness: 5.2, Bladder: 27.8, Detectiveness: 0, Relaxation: 10.4
+HungerLevel: the y value for x = 20.85 (with index 208) is 0.012428767487032796
+TirednessLevel: the y value for x = 5.2 (with index 52) is 2.9828341985644033e-17
+BladderLevel: the y value for x = 27.8 (with index 278) is 0.0006884730290420361
+DetectiveNeed: the y value for x = 0 (with index 0) is 0.8
+RelaxationNeed: the y value for x = 10.4 (with index 104) is 0.5956649342034728
+
+Perry is in detective mode
+DetectiveNeed: 0
+{"name": "solve_crime", "value": 10, "time_in_min": 10}
+
+Perry after choosing #4 activity
+Perry T60 - Hunger: 25.02, Tiredness: 6.24, Bladder: 33.36, Detectiveness: 0, Relaxation: 12.48
+HungerLevel: the y value for x = 25.02 (with index 250) is 0.01692327199331621
+TirednessLevel: the y value for x = 6.24 (with index 62) is 4.660846182432644e-17
+BladderLevel: the y value for x = 33.36 (with index 333) is 0.0012272895904385283
+DetectiveNeed: the y value for x = 0 (with index 0) is 0.8
+RelaxationNeed: the y value for x = 12.48 (with index 125) is 0.5937374812249687
+
+Perry is in detective mode
+DetectiveNeed: 0
+{"name": "solve_crime", "value": 10, "time_in_min": 10}
+
+Perry after choosing #5 activity
+Perry T70 - Hunger: 29.19, Tiredness: 7.28, Bladder: 38.92, Detectiveness: 0, Relaxation: 14.56
+HungerLevel: the y value for x = 29.19 (with index 292) is 0.02246920928321401
+TirednessLevel: the y value for x = 7.28 (with index 73) is 7.475217855005431e-17
+BladderLevel: the y value for x = 38.92 (with index 389) is 0.002183913478127714
+DetectiveNeed: the y value for x = 0 (with index 0) is 0.8
+RelaxationNeed: the y value for x = 14.56 (with index 145) is 0.5915731547363179
+
+Perry is in detective mode
+DetectiveNeed: 0
+{"name": "solve_crime", "value": 10, "time_in_min": 10}
+
+Perry after choosing #6 activity
+Perry T80 - Hunger: 33.36, Tiredness: 8.32, Bladder: 44.48, Detectiveness: 0, Relaxation: 16.64
+
+Perry after 800 minutes (increased through the day)
+Perry T880 - Hunger: 100, Tiredness: 91.52, Bladder: 100, Detectiveness: 100, Relaxation: 100
+HungerLevel: the y value for x = 100 (with index 999) is 1.0
+TirednessLevel: the y value for x = 91.52 (with index 914) is 0.033259880324547623
+BladderLevel: the y value for x = 100 (with index 999) is 1.0
+DetectiveNeed: the y value for x = 100 (with index 999) is 0.4
+RelaxationNeed: the y value for x = 100 (with index 999) is 0.2
+
+Perry is hungry
+HungerLevel: 60
+{"name": "eat_meal", "value": 40, "time_in_min": 30}
+
+Perry after choosing #7 activity
+Perry T910 - Hunger: 60, Tiredness: 94.64, Bladder: 100, Detectiveness: 100, Relaxation: 100
+HungerLevel: the y value for x = 60 (with index 599) is 0.12919718957716966
+TirednessLevel: the y value for x = 94.64 (with index 945) is 0.11507603880013954
+BladderLevel: the y value for x = 100 (with index 999) is 1.0
+DetectiveNeed: the y value for x = 100 (with index 999) is 0.4
+RelaxationNeed: the y value for x = 100 (with index 999) is 0.2
+
+Perry needs to go to the bathroom
+BladderLevel: 20
+{"name": "go_bathroom", "value": 80, "time_in_min": 10}
+
+Perry after choosing #8 activity
+Perry T920 - Hunger: 64.17, Tiredness: 95.68, Bladder: 20, Detectiveness: 100, Relaxation: 100
+HungerLevel: the y value for x = 64.17 (with index 641) is 0.1610081973609227
+TirednessLevel: the y value for x = 95.68 (with index 956) is 0.1787581110879489
+BladderLevel: the y value for x = 20 (with index 200) is 0.00029074816765704934
+DetectiveNeed: the y value for x = 100 (with index 999) is 0.4
+RelaxationNeed: the y value for x = 100 (with index 999) is 0.2
+
+Perry is in detective mode
+DetectiveNeed: 90
+{"name": "solve_crime", "value": 10, "time_in_min": 10}
+
+Perry after choosing #9 activity
+Perry T930 - Hunger: 68.34, Tiredness: 96.72, Bladder: 25.56, Detectiveness: 90, Relaxation: 100
+HungerLevel: the y value for x = 68.34 (with index 683) is 0.20026099019948915
+TirednessLevel: the y value for x = 96.72 (with index 966) is 0.26678256348744367
+BladderLevel: the y value for x = 25.56 (with index 255) is 0.000537552143343442
+DetectiveNeed: the y value for x = 90 (with index 899) is 0.40904600572002403
+RelaxationNeed: the y value for x = 100 (with index 999) is 0.2
+
+Perry is in detective mode
+DetectiveNeed: 81.61
+{"name": "solve_crime", "value": 10, "time_in_min": 10}
+
+Perry after choosing #10 activity
+Perry T940 - Hunger: 72.51, Tiredness: 97.76, Bladder: 31.12, Detectiveness: 81.61, Relaxation: 100
+HungerLevel: the y value for x = 72.51 (with index 724) is 0.24742099529306294
+TirednessLevel: the y value for x = 97.76 (with index 977) is 0.4144176982233571
+BladderLevel: the y value for x = 31.12 (with index 311) is 0.0009757320279898039
+DetectiveNeed: the y value for x = 81.61 (with index 815) is 0.4174499316945616
+RelaxationNeed: the y value for x = 100 (with index 999) is 0.2
+
+Perry is in detective mode
+DetectiveNeed: 73.22
+{"name": "solve_crime", "value": 10, "time_in_min": 10}
+
+Perry after choosing #11 activity
+Perry T950 - Hunger: 76.68, Tiredness: 98.8, Bladder: 36.68, Detectiveness: 73.22, Relaxation: 100
+HungerLevel: the y value for x = 76.68 (with index 766) is 0.30688897504326285
+TirednessLevel: the y value for x = 98.8 (with index 987) is 0.6184861498799229
+BladderLevel: the y value for x = 36.68 (with index 366) is 0.0017254563077500104
+DetectiveNeed: the y value for x = 73.22 (with index 731) is 0.4267570893064909
+RelaxationNeed: the y value for x = 100 (with index 999) is 0.2
+
+Perry is tired
+TirednessLevel: 10
+{"name": "sleep", "value": 90, "time_in_min": 120}
+
+Perry after choosing #12 activity
+Perry T1070 - Hunger: 100, Tiredness: 10, Bladder: 100, Detectiveness: 92.54, Relaxation: 100
+HungerLevel: the y value for x = 100 (with index 999) is 1.0
+TirednessLevel: the y value for x = 10 (with index 100) is 2.286345284581889e-16
+BladderLevel: the y value for x = 100 (with index 999) is 1.0
+DetectiveNeed: the y value for x = 92.54 (with index 924) is 0.40669446249010865
+RelaxationNeed: the y value for x = 100 (with index 999) is 0.2
+
+Perry is hungry
+HungerLevel: 60
+{"name": "eat_meal", "value": 40, "time_in_min": 30}
+
+Perry after choosing #13 activity
+Perry T1100 - Hunger: 60, Tiredness: 13.12, Bladder: 100, Detectiveness: 97.37, Relaxation: 100
+HungerLevel: the y value for x = 60 (with index 599) is 0.12919718957716966
+TirednessLevel: the y value for x = 13.12 (with index 131) is 8.015043840444227e-16
+BladderLevel: the y value for x = 100 (with index 999) is 1.0
+DetectiveNeed: the y value for x = 97.37 (with index 973) is 0.40226266354267587
+RelaxationNeed: the y value for x = 100 (with index 999) is 0.2
+
+Perry needs to go to the bathroom
+BladderLevel: 20
+{"name": "go_bathroom", "value": 80, "time_in_min": 10}
+
+Perry after choosing #14 activity
+Perry T1110 - Hunger: 64.17, Tiredness: 14.16, Bladder: 20, Detectiveness: 98.98, Relaxation: 100
+HungerLevel: the y value for x = 64.17 (with index 641) is 0.1610081973609227
+TirednessLevel: the y value for x = 14.16 (with index 141) is 1.1982748753332365e-15
+BladderLevel: the y value for x = 20 (with index 200) is 0.00029074816765704934
+DetectiveNeed: the y value for x = 98.98 (with index 989) is 0.40086327894380497
+RelaxationNeed: the y value for x = 100 (with index 999) is 0.2
+
+Perry is in detective mode
+DetectiveNeed: 90
+{"name": "solve_crime", "value": 10, "time_in_min": 10}
+
+Perry after choosing #15 activity
+Perry T1120 - Hunger: 68.34, Tiredness: 15.2, Bladder: 25.56, Detectiveness: 90, Relaxation: 100

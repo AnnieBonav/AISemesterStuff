@@ -3,16 +3,18 @@ import json
 
 class Needs(Enum):
     """Class representing a Need"""
-    BL = 'BladderLevel'
-    TL = 'TirednessLevel'
-    HL = 'HungerLevel'
+    BL = "BladderLevel"
+    TL = "TirednessLevel"
+    HL = "HungerLevel"
+    RN = "RelaxationNeed"
+    DN = "DetectiveNeed"
 
 class TOD(Enum):
     """Class representing a Time of Day"""
-    MORNING = 'Morning'
-    AFTERNOON = 'Afternoon'
-    EVENING = 'Evening'
-    NIGHT = 'Night'
+    MORNING = "Morning"
+    AFTERNOON = "Afternoon"
+    EVENING = "Evening"
+    NIGHT = "Night"
 
 class Action:
     """Class representing an Action"""

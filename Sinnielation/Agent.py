@@ -40,10 +40,26 @@ class Agent:
         self.states["tiredness"].decrease(action.value)
         print(action)
 
+    def solve_crime(self, action : Action):
+        if self.fake_time:
+            self.day.fake_pass_time(action.time_in_min, "solve_crime", action.name)
+
+        self.states["detectiveness"].decrease(action.value)
+        print(action)
+
+    def relax(self, action : Action):
+        if self.fake_time:
+            self.day.fake_pass_time(action.time_in_min, "relax", action.name)
+
+        self.states["relaxation"].decrease(action.value)
+        print(action)
+
     def pass_time(self, minutes, activity = None, action = None):
         hunger_increase = round(1/2.4, 4)
         tiredness_increase = round(1/9.6, 4)
         bladder_increase = round(1/1.8, 4)
+        detectiveness_increase = round(1/6.2, 4) # No reason
+        relaxation_increase = round(1/4.8, 4) # No reason
 
         for _ in range(minutes):
             # want to eat every 4 hours (240 min) then hunger increases by 1/0.24 every 10 min tick
@@ -55,7 +71,10 @@ class Agent:
             # want to go to the bathroom every 2 hours, then bladder increases by 1/0.18 every 10 min tick
             self.states["bladder"].increase(bladder_increase)
 
-        info_json = {"current_time" : self.day.time, "entry_type" : "time_increase", "delta_mins" : minutes, "character_name": self.name, "hunger_increase": hunger_increase, "tiredness_increase": tiredness_increase, "bladder_increase": bladder_increase, "modified_hunger_value" : self.states["hunger"].current_value, "modified_tiredness_value" : self.states["tiredness"].current_value, "modified_bladder_value" : self.states["bladder"].current_value}
+            self.states["detectiveness"].increase(detectiveness_increase)
+            self.states["relaxation"].increase(relaxation_increase)
+
+        info_json = {"current_time" : self.day.time, "entry_type" : "time_increase", "delta_mins" : minutes, "character_name": self.name, "hunger_increase": hunger_increase, "tiredness_increase": tiredness_increase, "bladder_increase": bladder_increase, "detectiveness_increase" : detectiveness_increase, "relaxation_increase" : relaxation_increase, "modified_hunger_value" : self.states["hunger"].current_value, "modified_tiredness_value" : self.states["tiredness"].current_value, "modified_bladder_value" : self.states["bladder"].current_value, "modified_detectiveness_value" : self.states["detectiveness"].current_value, "modified_relaxation_value" : self.states["relaxation"].current_value}
 
         if activity:
             info_json["called_by_activity"] = activity
@@ -70,7 +89,7 @@ class Agent:
             print("\n",action)
 
     def __str__(self):
-        return f"{self.name} T{self.day.time} - Hunger: {self.states['hunger'].current_value}, Tiredness: {self.states['tiredness'].current_value}, Bladder: {self.states['bladder'].current_value}"
+        return f"{self.name} T{self.day.time} - Hunger: {self.states['hunger'].current_value}, Tiredness: {self.states['tiredness'].current_value}, Bladder: {self.states['bladder'].current_value}, Detectiveness: {self.states['detectiveness'].current_value}, Relaxation: {self.states['relaxation'].current_value}"
     
     def choose_random_activity(self):
         # The agent should choose a random activity
