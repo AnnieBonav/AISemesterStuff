@@ -7,12 +7,19 @@ class Needs(Enum):
     TL = 'TirednessLevel'
     HL = 'HungerLevel'
 
+class TOD(Enum):
+    """Class representing a Time of Day"""
+    MORNING = 'Morning'
+    AFTERNOON = 'Afternoon'
+    EVENING = 'Evening'
+    NIGHT = 'Night'
+
 class Action:
     """Class representing an Action"""
-    def __init__(self, name : str, value : int, time_in_10_min : int):
+    def __init__(self, name : str, value : int, time_in_min : int):
         self.name = name
         self.value = value
-        self.time_in_10_min = time_in_10_min
+        self.time_in_min = time_in_min
     
     def get_json_info(self):
         return json.dumps(self.__dict__)

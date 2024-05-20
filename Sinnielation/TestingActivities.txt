@@ -1,0 +1,134 @@
+
+Perry after creating
+Perry T0 - Hunger: 0, Tiredness: 0, Bladder: 0
+
+Perry after 10 minutes (increased through the day)
+Perry T10 - Hunger: 4.17, Tiredness: 1.04, Bladder: 5.56
+
+Perry after 10 minutes (increased through the day)
+Perry T20 - Hunger: 8.34, Tiredness: 2.08, Bladder: 11.12
+
+Perry choosing its first activity
+HungerLevel: the y value for x = 8.34 (with index 83) is 0.003493582034759708
+TirednessLevel: the y value for x = 2.08 (with index 21) is 5.600671229482902e-18
+BladderLevel: the y value for x = 11.12 (with index 111) is 9.251707984300384e-05
+
+Perry is hungry
+HungerLevel: 0.8500000000000014
+{"name": "eat_meal", "value": 20, "time_in_min": 30}
+
+Perry after choosing #1 activity
+Perry T50 - Hunger: 0.8500000000000014, Tiredness: 5.2, Bladder: 27.8
+HungerLevel: the y value for x = 0.8500000000000014 (with index 8) is 0.00027712891698740134
+TirednessLevel: the y value for x = 5.2 (with index 52) is 2.9828341985644033e-17
+BladderLevel: the y value for x = 27.8 (with index 278) is 0.0006884730290420361
+
+Perry needs to go to the bathroom
+BladderLevel: 23.36
+{"name": "go_bathroom", "value": 10, "time_in_min": 10}
+
+Perry after choosing #2 activity
+Perry T60 - Hunger: 5.02, Tiredness: 6.24, Bladder: 23.36
+HungerLevel: the y value for x = 5.02 (with index 50) is 0.0019289104603019518
+TirednessLevel: the y value for x = 6.24 (with index 62) is 4.660846182432644e-17
+BladderLevel: the y value for x = 23.36 (with index 233) is 0.0004223266455127672
+
+Perry is hungry
+HungerLevel: 0
+{"name": "eat_meal", "value": 20, "time_in_min": 30}
+
+Perry after choosing #3 activity
+Perry T90 - Hunger: 0, Tiredness: 9.36, Bladder: 40.04
+HungerLevel: the y value for x = 0 (with index 0) is 0.0
+TirednessLevel: the y value for x = 9.36 (with index 94) is 1.7889980480923797e-16
+BladderLevel: the y value for x = 40.04 (with index 400) is 0.0024434080073791834
+
+Perry needs to go to the bathroom
+BladderLevel: 35.6
+{"name": "go_bathroom", "value": 10, "time_in_min": 10}
+
+Perry after choosing #4 activity
+Perry T100 - Hunger: 4.17, Tiredness: 10.4, Bladder: 35.6
+HungerLevel: the y value for x = 4.17 (with index 42) is 0.0015869507197608641
+TirednessLevel: the y value for x = 10.4 (with index 104) is 2.6908601404759253e-16
+BladderLevel: the y value for x = 35.6 (with index 356) is 0.0015567764734957085
+
+Perry is hungry
+HungerLevel: 0
+{"name": "eat_meal", "value": 20, "time_in_min": 30}
+
+Perry after choosing #5 activity
+Perry T130 - Hunger: 0, Tiredness: 13.52, Bladder: 52.28
+HungerLevel: the y value for x = 0 (with index 0) is 0.0
+TirednessLevel: the y value for x = 13.52 (with index 135) is 9.41462696575508e-16
+BladderLevel: the y value for x = 52.28 (with index 522) is 0.008394965971976498
+
+Perry needs to go to the bathroom
+BladderLevel: 47.84
+{"name": "go_bathroom", "value": 10, "time_in_min": 10}
+
+Perry after choosing #6 activity
+Perry T140 - Hunger: 4.17, Tiredness: 14.56, Bladder: 47.84
+
+Perry after 800 minutes (increased through the day)
+Perry T940 - Hunger: 100, Tiredness: 97.76, Bladder: 100
+HungerLevel: the y value for x = 100 (with index 999) is 1.0
+TirednessLevel: the y value for x = 97.76 (with index 977) is 0.4144176982233571
+BladderLevel: the y value for x = 100 (with index 999) is 1.0
+
+Perry is hungry
+HungerLevel: 80
+{"name": "eat_meal", "value": 20, "time_in_min": 30}
+
+Perry after choosing #7 activity
+Perry T970 - Hunger: 80, Tiredness: 100, Bladder: 100
+HungerLevel: the y value for x = 80 (with index 799) is 0.363220793183604
+TirednessLevel: the y value for x = 100 (with index 999) is 1.0
+BladderLevel: the y value for x = 100 (with index 999) is 1.0
+
+Perry is tired
+TirednessLevel: 70
+{"name": "nap", "value": 30, "time_in_min": 60}
+
+Perry after choosing #8 activity
+Perry T1030 - Hunger: 100, Tiredness: 70, Bladder: 100
+HungerLevel: the y value for x = 100 (with index 999) is 1.0
+TirednessLevel: the y value for x = 70 (with index 699) is 6.070849500581112e-06
+BladderLevel: the y value for x = 100 (with index 999) is 1.0
+
+Perry is hungry
+HungerLevel: 80
+{"name": "eat_meal", "value": 20, "time_in_min": 30}
+
+Perry after choosing #9 activity
+Perry T1060 - Hunger: 80, Tiredness: 73.12, Bladder: 100
+HungerLevel: the y value for x = 80 (with index 799) is 0.363220793183604
+TirednessLevel: the y value for x = 73.12 (with index 730) is 2.1004564834931774e-05
+BladderLevel: the y value for x = 100 (with index 999) is 1.0
+
+Perry needs to go to the bathroom
+BladderLevel: 90
+{"name": "go_bathroom", "value": 10, "time_in_min": 10}
+
+Perry after choosing #10 activity
+Perry T1070 - Hunger: 84.17, Tiredness: 74.16, Bladder: 90
+HungerLevel: the y value for x = 84.17 (with index 841) is 0.44977867876609734
+TirednessLevel: the y value for x = 74.16 (with index 741) is 3.2628307102559474e-05
+BladderLevel: the y value for x = 90 (with index 899) is 0.3674826614865105
+
+Perry needs to go to the bathroom
+BladderLevel: 85.56
+{"name": "go_bathroom", "value": 10, "time_in_min": 10}
+
+Perry after choosing #11 activity
+Perry T1080 - Hunger: 88.34, Tiredness: 75.2, Bladder: 85.56
+HungerLevel: the y value for x = 88.34 (with index 883) is 0.5565856926906678
+TirednessLevel: the y value for x = 75.2 (with index 751) is 4.8695208055728835e-05
+BladderLevel: the y value for x = 85.56 (with index 855) is 0.23655182671919464
+
+Perry needs to go to the bathroom
+BladderLevel: 81.12
+{"name": "go_bathroom", "value": 10, "time_in_min": 10}
+
+Perry after choosing #12 activity
+Perry T1090 - Hunger: 92.51, Tiredness: 76.24, Bladder: 81.12
